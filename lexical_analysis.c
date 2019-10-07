@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
 #define N 300
 
 char token[N], symbol[10], a;
@@ -53,8 +52,7 @@ void reserver2() {
 	else if (a == '}') strcpy(symbol, "RBRACE");
 }
 
-int scan()
-{
+int getsym(){
 	strcpy(token, "");  //清空字符串
 	if ((a = getc(in)) == EOF) return 0; //先读入一个字符，防止isspace报错
 	while (isspace(a)) {	 /*读取字符，跳过空格、换行和Tab,\t\f等*/
@@ -147,17 +145,53 @@ int scan()
 	return 1;
 }
 
-int main() {
-	in = fopen("testfile.txt", "rt+");
-	out = fopen("output.txt", "w");
-	while (1) {
-		if (!scan()) break;
-		fputs(symbol, out);
-		fputs(" ", out);
-		fputs(token, out);
-		fputs("\n", out);
+//指针移回到当前已读出单词的开头位置
+int ungetsym() {
+	int i = strlen(token);
+	while (i--) unget(a, in);
+}
+
+
+//预读  int|char+标识符 下一个单词(字符)  x = 2
+//预读下一个单词   x = 1
+int preload(int x) {
+	int value = 0, count;
+	char ttmp[N], stmp[10]; //对当前单词进行备份
+	strcpy(ttmp, token);  
+	strcpy(stmp, symbol);
+	
+	if (x == 1) {
+		getsym();
+		if (strcmp(symbol, "LPARENT") == 0)value = 1;
+		if (strcmp(symbol, "MAINTK") == 0)value = 2; 
+		ungetsym();
+		strcpy(token, ttmp);//还原备份
+		strcpy(symbol, stmp);
+		return value;
 	}
-	fclose(in);
-	fclose(out);
-	return 0;
+
+	getsym(); //取得标识符
+	count = strlen(token); //标识符的长度
+
+	//读下一个单词，空格也需计数
+	a = getc(in);
+	count++;
+	while (isspace(a)) {
+		a = getc(in);
+		count++;
+	}
+	if (a == '(')value = 1; //如果为"(" 表示是函数，返回1
+	
+	while (count--)ungetc(a, in); //回退到标识符开头位置
+	strcpy(token, ttmp);//还原备份
+	strcpy(symbol, stmp);
+	return value;
+}
+
+//打印当前单词
+void printlex() {
+	fputs(symbol, out);
+	fputs(" ", out);
+	fputs(token, out);
+	fputs("\n", out);
 }

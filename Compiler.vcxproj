@@ -125,7 +125,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.c" />
+    <ClCompile Include="lexical_analysis.c" />
+    <ClCompile Include="syntax_analysis.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="word.h" />
