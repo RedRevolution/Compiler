@@ -1,0 +1,37 @@
+#pragma once
+extern string nfunID[300];
+extern int nfuncnt;
+
+void error();
+void printsyn(const char s[]);
+void usINT();
+void INT();
+int find(char s[]);
+void str();
+void cd();
+void cs();
+void dh();
+void vd();
+void vs();
+void pt();
+void costa();
+void rfun();
+void nfun();
+void mfun();
+void expr();
+void term();
+void factor();
+void sta();
+void assta();
+void cdsta();
+void condition();
+void lpsta();
+void steplen();
+void callrfun();
+void callnfun();
+void vpt();
+void stas();
+void rdsta();
+void wtsta();
+void rsta();
+void program();

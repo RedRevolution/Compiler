@@ -1,18 +1,10 @@
-#include "lexical_analysis.c"
+#include "lexical_analysis.h"
+#include "syntax_analysis.h"
 #include <stdlib.h>
+using namespace std;
 
-char nfunID[][N];
+string nfunID[300];
 int nfuncnt;
-
-//²éÕÒÎŞ·µ»ØÖµº¯Êı±êÊ¶·û±í
-int find(char s[]) {
-	for (int i = 0; i < nfuncnt; i++) {
-		if (strcmp(nfunID[i], s) == 0) {
-			return 1;
-		}
-	}
-	return 0;
-}
 
 void error() {
 	printf("error");
@@ -24,226 +16,217 @@ void printsyn(const char s[]) {
 	fputs("\n", out);
 }
 
-//³ÌĞò*
-void program() {
-	//³£Á¿ËµÃ÷
-	if (symbol == "CONSTTK") {
-		cs();
-	}
-	//±äÁ¿ËµÃ÷
-	if (symbol == "INTTK" || symbol == "CHARTK" && !preload(2)) {
-		vs();
-	}
-	//ÓĞ|ÎŞ·µ»ØÖµº¯Êı¶¨Òå
-	while (!(symbol == "VOIDTK" && preload(1) == 2)) {
-		if (symbol == "INTTK" || symbol == "CHARTK" && preload(2))rfun();
-		else nfun();
-	}
-	mfun();
-	printsyn("<³ÌĞò>");
-}
-
-//×Ö·û´®*
-void str() {
-	if (symbol != "STRCON") error();
-	printlex();
-	printsyn("<×Ö·û´®>");
+//æ— ç¬¦å·æ•´æ•°*
+void usINT() {
+	if (symbol != "INTCON") error();
+	printlex(); //æ‰“å°æ•´æ•°
+	printsyn("<æ— ç¬¦å·æ•´æ•°>");
 	getsym();
 }
 
-//³£Á¿ËµÃ÷*
-void cs() {
-	if (symbol != "CONSTTK") error();
-	printlex(); 
-	while (1) {
+//æ•´æ•°*
+void INT() {
+	if (symbol != "PLUS" && symbol != "MINU" && symbol != "INTCON") error();
+	if (symbol == "PLUS" || symbol == "MINU") {
+		printlex(); //æ‰“å°+-
 		getsym();
-		cd();
-		printlex(); //´òÓ¡·ÖºÅ
-		getsym();
-		if (symbol != "CONSTTK")break;
-		printlex(); //´òÓ¡const
 	}
-	printsyn("<³£Á¿ËµÃ÷>");
+	usINT();
+	printsyn("<æ•´æ•°>");
 }
 
-//³£Á¿¶¨Òå*
+//æŸ¥æ‰¾æ— è¿”å›å€¼å‡½æ•°æ ‡è¯†ç¬¦è¡¨
+int find(string s) {
+	for (int i = 0; i < nfuncnt; i++) {
+		if (nfunID[i] == s) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
+//å­—ç¬¦ä¸²*
+void str() {
+	if (symbol != "STRCON") error();
+	printlex();
+	printsyn("<å­—ç¬¦ä¸²>");
+	getsym();
+}
+
+//å¸¸é‡å®šä¹‰*
 void cd() {
 	if (symbol != "INTTK" && symbol != "CHARTK") error();
-	printlex(); //´òÓ¡int|char
+	printlex(); //æ‰“å°int|char
 	if (symbol == "INTTK") {
-		while(1){
-			getsym(); //±êÊ¶·û
+		while (1) {
+			getsym(); //æ ‡è¯†ç¬¦
 			printlex();
 			getsym(); // =
 			printlex();
 			getsym();
 			INT();
-			if (symbol != "COMMA") break; //·ÖºÅÍË³ö
-			printlex(); //´òÓ¡¶ººÅ
+			if (symbol != "COMMA") break; //åˆ†å·é€€å‡º
+			printlex(); //æ‰“å°é€—å·
 		}
 	}
 	else {
 		while (1) {
-			getsym(); //±êÊ¶·û
+			getsym(); //æ ‡è¯†ç¬¦
 			printlex();
 			getsym(); // =
 			printlex();
-			getsym(); //×Ö·û
+			getsym(); //å­—ç¬¦
 			printlex();
 			getsym();
 			if (symbol != "COMMA") break;
-			printlex(); //´òÓ¡¶ººÅ
+			printlex(); //æ‰“å°é€—å·
 		}
 	}
-	printsyn("<³£Á¿¶¨Òå>");
+	printsyn("<å¸¸é‡å®šä¹‰>");
 }
 
-//ÕûÊı*
-void INT() {
-	if (symbol != "PLUS" && symbol != "MINU" && symbol != "INTCON") error();
-	if (symbol == "PLUS" || symbol == "MINU") {
-		printlex(); //´òÓ¡+-
+//å¸¸é‡è¯´æ˜*
+void cs() {
+	if (symbol != "CONSTTK") error();
+	printlex();
+	while (1) {
 		getsym();
+		cd();
+		printlex(); //æ‰“å°åˆ†å·
+		getsym();
+		if (symbol != "CONSTTK")break;
+		printlex(); //æ‰“å°const
 	}
-	usINT();
-	printsyn("<ÕûÊı>");
+	printsyn("<å¸¸é‡è¯´æ˜>");
 }
 
-//ÎŞ·ûºÅÕûÊı*
-void usINT() {
-	if (symbol != "INTCON") error();
-	printlex(); //´òÓ¡ÕûÊı
-	printsyn("<ÎŞ·ûºÅÕûÊı>");
-	getsym();
-}
-
-
-//ÉùÃ÷Í·²¿*
+//å£°æ˜å¤´éƒ¨*
 void dh() {
 	if (symbol != "INTTK" && symbol != "CHARTK") error();
 	printlex();
-	getsym(); //±êÊ¶·û
-	printlex(); //´òÓ¡±êÊ¶·û
-	printsyn("<ÉùÃ÷Í·²¿>");
+	getsym(); //æ ‡è¯†ç¬¦
+	printlex(); //æ‰“å°æ ‡è¯†ç¬¦
+	printsyn("<å£°æ˜å¤´éƒ¨>");
 	getsym();
 }
 
-//±äÁ¿ËµÃ÷*
-void vs() {
-	if (symbol != "INTTK" && symbol != "CHARTK") error();
-	while (1) {
-		vd();
-		printlex(); //´òÓ¡·ÖºÅ
-		getsym();
-		if (symbol != "INTTK" && symbol != "CHARTK")break;
-		if (preload(2))break; //º¯Êı¶¨Òå¶ø·Ç±äÁ¿¶¨Òå
-	}
-	printsyn("<±äÁ¿ËµÃ÷>");
-}
-
-//±äÁ¿¶¨Òå*
+//å˜é‡å®šä¹‰*
 void vd() {
 	if (symbol != "INTTK" && symbol != "CHARTK") error();
 	printlex();
 	while (1) {
-		getsym(); //¶ÁÈëÒ»¸ö±êÊ¶·û
+		getsym(); //è¯»å…¥ä¸€ä¸ªæ ‡è¯†ç¬¦
 		printlex();
-		getsym(); //¿ÉÄÜÊÇ¶ººÅ£¬·ÖºÅ»òÕß[
+		getsym(); //å¯èƒ½æ˜¯é€—å·ï¼Œåˆ†å·æˆ–è€…[
 		// [
-		if (symbol == "LBRACK") {  
-			printlex(); //´òÓ¡[
-			getsym(); //¶ÁÈëÎŞ·ûºÅÕûÊı
+		if (symbol == "LBRACK") {
+			printlex(); //æ‰“å°[
+			getsym(); //è¯»å…¥æ— ç¬¦å·æ•´æ•°
 			usINT();
-			printlex(); //´òÓ¡]
-			getsym(); // ¶ÁÈë¶ººÅ|·ÖºÅ
+			printlex(); //æ‰“å°]
+			getsym(); // è¯»å…¥é€—å·|åˆ†å·
 		}
-		if (symbol == "SEMICN")break; //·ÖºÅÍË³ö
-		printlex(); //´òÓ¡¶ººÅ
+		if (symbol == "SEMICN")break; //åˆ†å·é€€å‡º
+		printlex(); //æ‰“å°é€—å·
 	}
-	printsyn("<±äÁ¿¶¨Òå>");
+	printsyn("<å˜é‡å®šä¹‰>");
 }
 
-//ÓĞ·µ»ØÖµº¯Êı¶¨Òå*
-void rfun() {
+//å˜é‡è¯´æ˜*
+void vs() {
 	if (symbol != "INTTK" && symbol != "CHARTK") error();
-	dh();
-	printlex(); //´òÓ¡£¨
-	getsym(); 
-	pt();
-	printlex(); //´òÓ¡£©
-	getsym();
-	printlex(); //´òÓ¡{
-	getsym();
-	costa();
-	printlex(); //´òÓ¡}
-	printsyn("<ÓĞ·µ»ØÖµº¯Êı¶¨Òå>");
-	getsym();
+	while (1) {
+		vd();
+		printlex(); //æ‰“å°åˆ†å·
+		getsym();
+		if (symbol != "INTTK" && symbol != "CHARTK")break;
+		if (preload(2))break; //å‡½æ•°å®šä¹‰è€Œéå˜é‡å®šä¹‰
+	}
+	printsyn("<å˜é‡è¯´æ˜>");
 }
 
-//ÎŞ·µ»ØÖµº¯Êı¶¨Òå*
-void nfun() {
-	if (symbol != "VOIDTK") error();
-	getsym(); //¶ÁÈë±êÊ¶·û
-	strcpy(nfunID[nfuncnt++], token); //´ò±í
-	printlex(); //´òÓ¡±êÊ¶·û
-	getsym();
-	printlex(); //´òÓ¡£¨
-	getsym();
-	pt();
-	printlex(); //´òÓ¡£©
-	getsym();
-	printlex(); //´òÓ¡{
-	getsym();
-	costa();
-	printlex(); //´òÓ¡}
-	printsyn("<ÎŞ·µ»ØÖµº¯Êı¶¨Òå>");
-	getsym();
+//å‚æ•°è¡¨*
+void pt() {
+	//å‚æ•°ä¸ä¸ºç©º
+	if (symbol == "INTTK" || symbol == "CHARTK") {
+		printlex(); //æ‰“å° int|char
+		while (1) {
+			getsym(); //è¯»å…¥æ ‡è¯†ç¬¦
+			printlex(); //æ‰“å°æ ‡è¯†ç¬¦
+			getsym(); //è¯»å…¥é€—å·æˆ–è€…ï¼‰
+			if (symbol != "COMMA")break;
+			printlex(); //æ‰“å°é€—å·
+			getsym(); //è¯»å…¥ int|char
+			printlex(); //æ‰“å° int|char
+		}
+	}
+	printsyn("<å‚æ•°è¡¨>");
 }
 
-//¸´ºÏÓï¾ä*
+//å¤åˆè¯­å¥*
 void costa() {
 	if (symbol == "CONSTTK")cs();
 	if (symbol == "INTTK" || symbol == "CHARTK")vs();
 	stas();
-	printsyn("¸´ºÏÓï¾ä");
+	printsyn("<å¤åˆè¯­å¥>");
 }
 
-//²ÎÊı±í*
-void pt() {
-	//²ÎÊı²»Îª¿Õ
-	if (symbol == "INTTK" || symbol == "CHARTK") {
-		printlex(); //´òÓ¡ int|char
-		while (1) {
-			getsym(); //¶ÁÈë±êÊ¶·û
-			printlex(); //´òÓ¡±êÊ¶·û
-			getsym(); //¶ÁÈë¶ººÅ»òÕß£©
-			if (symbol != "COMMA")break;
-			printlex(); //´òÓ¡¶ººÅ
-			getsym(); //¶ÁÈë int|char
-			printlex(); //´òÓ¡ int|char
-		}
-	}
-	printsyn("<²ÎÊı±í>");
-}
-
-//Ö÷º¯Êı*
-void mfun() {
-	if (symbol != "VOIDTK") error();
-	getsym(); //¶ÁÈë±êÊ¶·ûmain
-	printlex(); //´òÓ¡±êÊ¶·ûmain
+//æœ‰è¿”å›å€¼å‡½æ•°å®šä¹‰*
+void rfun() {
+	if (symbol != "INTTK" && symbol != "CHARTK") error();
+	dh();
+	printlex(); //æ‰“å°ï¼ˆ
 	getsym();
-	printlex(); //´òÓ¡£¨
+	pt();
+	printlex(); //æ‰“å°ï¼‰
 	getsym();
-	printlex(); //´òÓ¡£©
-	getsym();
-	printlex(); //´òÓ¡{
+	printlex(); //æ‰“å°{
 	getsym();
 	costa();
-	printlex(); //´òÓ¡}
-	printsyn("<Ö÷º¯Êı>"); //Ö÷º¯Êı½áÊøÎŞĞëgetsym
+	printlex(); //æ‰“å°}
+	printsyn("<æœ‰è¿”å›å€¼å‡½æ•°å®šä¹‰>");
+	getsym();
 }
 
-//±í´ïÊ½*
+//æ— è¿”å›å€¼å‡½æ•°å®šä¹‰*
+void nfun() {
+	if (symbol != "VOIDTK") error();
+	getsym(); //è¯»å…¥æ ‡è¯†ç¬¦
+	nfunID[nfuncnt++] = token; //æ‰“è¡¨
+	printlex(); //æ‰“å°æ ‡è¯†ç¬¦
+	getsym();
+	printlex(); //æ‰“å°ï¼ˆ
+	getsym();
+	pt();
+	printlex(); //æ‰“å°ï¼‰
+	getsym();
+	printlex(); //æ‰“å°{
+	getsym();
+	costa();
+	printlex(); //æ‰“å°}
+	printsyn("<æ— è¿”å›å€¼å‡½æ•°å®šä¹‰>");
+	getsym();
+}
+
+//ä¸»å‡½æ•°*
+void mfun() {
+	if (symbol != "VOIDTK") error();
+	printlex(); //æ‰“å°void
+	getsym(); //è¯»å…¥æ ‡è¯†ç¬¦main
+	printlex(); //æ‰“å°æ ‡è¯†ç¬¦main
+	getsym();
+	printlex(); //æ‰“å°ï¼ˆ
+	getsym();
+	printlex(); //æ‰“å°ï¼‰
+	getsym();
+	printlex(); //æ‰“å°{
+	getsym();
+	costa();
+	printlex(); //æ‰“å°}
+	printsyn("<ä¸»å‡½æ•°>"); //ä¸»å‡½æ•°ç»“æŸæ— é¡»getsym
+}
+
+//è¡¨è¾¾å¼*
 void expr() {
 	if (symbol == "PLUS" || symbol == "MINU") {
 		printlex();
@@ -252,13 +235,13 @@ void expr() {
 	while (1) {
 		term();
 		if (symbol != "PLUS" && symbol != "MINU")break;
-		printlex(); //´òÓ¡Õı¸ººÅ
+		printlex(); //æ‰“å°æ­£è´Ÿå·
 		getsym();
 	}
-	printsyn("<±í´ïÊ½>");
+	printsyn("<è¡¨è¾¾å¼>");
 }
 
-//Ïî*
+//é¡¹*
 void term() {
 	factor();
 	while (symbol == "MUL" || symbol == "DIV") {
@@ -266,35 +249,35 @@ void term() {
 		getsym();
 		factor();
 	}
-	printsyn("<Ïî>");
+	printsyn("<é¡¹>");
 }
 
-//Òò×Ó*
+//å› å­*
 void factor() {
 	if (symbol == "IDENFR") {
-		//ÓĞ·µ»ØÖµµ÷ÓÃº¯Êı
+		//æœ‰è¿”å›å€¼è°ƒç”¨å‡½æ•°
 		if (preload(1)) {
 			callrfun();
-			printsyn("<Òò×Ó>");
+			printsyn("<å› å­>");
 			return;
 		}
 
-		printlex(); //´òÓ¡±êÊ¶·û
+		printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 		getsym();
-		//±êÊ¶·û[±í´ïÊ½]
+		//æ ‡è¯†ç¬¦[è¡¨è¾¾å¼]
 		if (symbol == "LBRACK") {
-			printlex(); //´òÓ¡[
+			printlex(); //æ‰“å°[
 			getsym();
 			expr();
-			printlex(); //´òÓ¡]
+			printlex(); //æ‰“å°]
 			getsym();
 		}
 	}
 	else if (symbol == "LPARENT") {
-		printlex(); //´òÓ¡£¨
+		printlex(); //æ‰“å°ï¼ˆ
 		getsym();
 		expr();
-		printlex(); //´òÓ¡£©
+		printlex(); //æ‰“å°ï¼‰
 		getsym();
 	}
 	else if (symbol == "PLUS" || symbol == "MINU" || symbol == "INTCON") {
@@ -304,21 +287,21 @@ void factor() {
 		printlex();
 		getsym();
 	}
-	printsyn("<Òò×Ó>");
+	printsyn("<å› å­>");
 }
 
-//Óï¾ä*
+//è¯­å¥*
 void sta() {
 	if (symbol == "IDENFR") {
-		if (preload(1)) {  //º¯Êıµ÷ÓÃ
+		if (preload(1)) {  //å‡½æ•°è°ƒç”¨
 			if (find(token)) callnfun();
 			else callrfun();
-			printlex(); //´òÓ¡·ÖºÅ
+			printlex(); //æ‰“å°åˆ†å·
 			getsym();
 		}
-		else {	//¸³ÖµÓï¾ä
+		else {	//èµ‹å€¼è¯­å¥
 			assta();
-			printlex(); //´òÓ¡·ÖºÅ
+			printlex(); //æ‰“å°åˆ†å·
 			getsym();
 		}
 	}
@@ -330,32 +313,36 @@ void sta() {
 	}
 	else if (symbol == "RETURNTK") {
 		rsta();
-		printlex(); //´òÓ¡·ÖºÅ
+		printlex(); //æ‰“å°åˆ†å·
 		getsym();
 	}
 	else if (symbol == "SCANFTK") {
 		rdsta();
-		printlex(); //´òÓ¡·ÖºÅ
+		printlex(); //æ‰“å°åˆ†å·
 		getsym();
 	}
 	else if (symbol == "PRINTFTK") {
 		wtsta();
-		printlex(); //´òÓ¡·ÖºÅ
+		printlex(); //æ‰“å°åˆ†å·
 		getsym();
 	}
 	else if (symbol == "LBRACE") {
-		printlex(); //´òÓ¡ {
+		printlex(); //æ‰“å° {
 		stas();
-		printlex(); //´òÓ¡ }
+		printlex(); //æ‰“å° }
 		getsym();
 	}
-	printsyn("<Óï¾ä>");
+	else { //ç©ºè¯­å¥
+		printlex(); //æ‰“å°åˆ†å·
+		getsym();
+	}
+	printsyn("<è¯­å¥>");
 }
 
-//¸³ÖµÓï¾ä*
+//èµ‹å€¼è¯­å¥*
 void assta() {
 	if (symbol != "IDENFR") error();
-	printlex(); //´òÓ¡±êÊ¶·û
+	printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 	getsym();
 	if (symbol == "ASSIGN") {
 		printlex();
@@ -363,27 +350,27 @@ void assta() {
 		expr();
 	}
 	else {
-		printlex(); //´òÓ¡[
+		printlex(); //æ‰“å°[
 		getsym();
 		expr();
-		printlex(); //´òÓ¡]
+		printlex(); //æ‰“å°]
 		getsym();
-		printlex(); //´òÓ¡=
+		printlex(); //æ‰“å°=
 		getsym();
 		expr();
 	}
-	printsyn("<¸³ÖµÓï¾ä>");
+	printsyn("<èµ‹å€¼è¯­å¥>");
 }
 
-//Ìõ¼şÓï¾ä*
+//æ¡ä»¶è¯­å¥*
 void cdsta() {
 	if (symbol != "IFTK")error();
 	printlex();
 	getsym();
-	printlex(); //´òÓ¡£¨
+	printlex(); //æ‰“å°ï¼ˆ
 	getsym();
 	condition();
-	printlex(); //´òÓ¡£©
+	printlex(); //æ‰“å°ï¼‰
 	getsym();
 	sta();
 	if (symbol == "ELSETK") {
@@ -391,31 +378,31 @@ void cdsta() {
 		getsym();
 		sta();
 	}
-	printsyn("<Ìõ¼şÓï¾ä>");
+	printsyn("<æ¡ä»¶è¯­å¥>");
 }
 
-//Ìõ¼ş*
+//æ¡ä»¶*
 void condition() {
 	expr();
 	if (symbol == "LSS" || symbol == "LEQ"
-			|| symbol == "GRE" || symbol == "GEQ"
-			|| symbol == "NEQ" || symbol == "EQL") {
+		|| symbol == "GRE" || symbol == "GEQ"
+		|| symbol == "NEQ" || symbol == "EQL") {
 		printlex();
 		getsym();
 		expr();
 	}
-	printsyn("<Ìõ¼ş>");
+	printsyn("<æ¡ä»¶>");
 }
 
-//Ñ­»·Óï¾ä*
+//å¾ªç¯è¯­å¥*
 void lpsta() {
 	if (symbol == "WHILETK") {
 		printlex();
 		getsym();
-		printlex(); //´òÓ¡£¨
+		printlex(); //æ‰“å°ï¼ˆ
 		getsym();
 		condition();
-		printlex(); //´òÓ¡£©
+		printlex(); //æ‰“å°ï¼‰
 		getsym();
 		sta();
 	}
@@ -423,154 +410,172 @@ void lpsta() {
 		printlex();
 		getsym();
 		sta();
-		printlex(); //´òÓ¡while
+		printlex(); //æ‰“å°while
 		getsym();
-		printlex();//´òÓ¡£¨
+		printlex();//æ‰“å°ï¼ˆ
 		getsym();
 		condition();
-		printlex(); //´òÓ¡£©
+		printlex(); //æ‰“å°ï¼‰
 		getsym();
 	}
 	else if (symbol == "FORTK") {
 		printlex();
 		getsym();
-		printlex(); //´òÓ¡£¨
+		printlex(); //æ‰“å°ï¼ˆ
 		getsym();
-		printlex(); //´òÓ¡±êÊ¶·û
+		printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 		getsym();
-		printlex(); //´òÓ¡=
+		printlex(); //æ‰“å°=
 		getsym();
 		expr();
-		printlex(); //´òÓ¡·ÖºÅ
+		printlex(); //æ‰“å°åˆ†å·
 		getsym();
 		condition();
-		printlex();//´òÓ¡·ÖºÅ
+		printlex();//æ‰“å°åˆ†å·
 		getsym();
-		printlex(); //´òÓ¡±êÊ¶·û
+		printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 		getsym();
-		printlex(); //´òÓ¡=
+		printlex(); //æ‰“å°=
 		getsym();
-		printlex(); //´òÓ¡±êÊ¶·û
+		printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 		getsym();
-		printlex(); //´òÓ¡+-
+		printlex(); //æ‰“å°+-
 		getsym();
 		steplen();
-		printlex();//´òÓ¡£©
+		printlex();//æ‰“å°ï¼‰
 		getsym();
 		sta();
 	}
-	printsyn("<Ñ­»·Óï¾ä>");
+	printsyn("<å¾ªç¯è¯­å¥>");
 }
 
-//²½³¤*
+//æ­¥é•¿*
 void steplen() {
 	if (symbol != "INTCON") error();
 	usINT();
-	printsyn("<²½³¤>");
+	printsyn("<æ­¥é•¿>");
 }
 
-//ÓĞ·µ»ØÖµº¯Êıµ÷ÓÃÓï¾ä*
+//æœ‰è¿”å›å€¼å‡½æ•°è°ƒç”¨è¯­å¥*
 void callrfun() {
 	if (symbol != "IDENFR") error();
-	printlex(); //´òÓ¡±êÊ¶·û
-	getsym(); 
-	printlex(); //´òÓ¡£¨
+	printlex(); //æ‰“å°æ ‡è¯†ç¬¦
+	getsym();
+	printlex(); //æ‰“å°ï¼ˆ
 	getsym();
 	vpt();
-	printlex(); //´òÓ¡£© 
-	printsyn("<ÓĞ·µ»ØÖµº¯Êıµ÷ÓÃÓï¾ä>");
+	printlex(); //æ‰“å°ï¼‰ 
+	printsyn("<æœ‰è¿”å›å€¼å‡½æ•°è°ƒç”¨è¯­å¥>");
 	getsym();
 }
 
-//ÎŞ·µ»ØÖµº¯Êıµ÷ÓÃÓï¾ä*
+//æ— è¿”å›å€¼å‡½æ•°è°ƒç”¨è¯­å¥*
 void callnfun() {
 	if (symbol != "IDENFR") error();
-	printlex(); //´òÓ¡±êÊ¶·û
+	printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 	getsym();
-	printlex(); //´òÓ¡£¨
+	printlex(); //æ‰“å°ï¼ˆ
 	getsym();
 	vpt();
-	printlex(); //´òÓ¡£© 
-	printsyn("<ÎŞ·µ»ØÖµº¯Êıµ÷ÓÃÓï¾ä>");
+	printlex(); //æ‰“å°ï¼‰ 
+	printsyn("<æ— è¿”å›å€¼å‡½æ•°è°ƒç”¨è¯­å¥>");
 	getsym();
 }
 
-//Öµ²ÎÊı±í*
+//å€¼å‚æ•°è¡¨*
 void vpt() {
 	if (symbol != "RPARENT") {
 		expr();
 		while (1) {
 			if (symbol != "COMMA")break;
-			printlex(); //´òÓ¡¶ººÅ
+			printlex(); //æ‰“å°é€—å·
 			getsym();
 			expr();
 		}
 	}
-	printsyn("<Öµ²ÎÊı±í>");
+	printsyn("<å€¼å‚æ•°è¡¨>");
 }
 
-//Óï¾äÁĞ*
+//è¯­å¥åˆ—*
 void stas() {
 	while (symbol != "RBRACE") sta();
-	printsyn("<Óï¾äÁĞ>");
+	printsyn("<è¯­å¥åˆ—>");
 }
 
-//¶ÁÓï¾ä*
+//è¯»è¯­å¥*
 void rdsta() {
 	if (symbol != "SCANFTK") error();
-	printlex(); //´òÓ¡scanf
+	printlex(); //æ‰“å°scanf
 	getsym();
-	printlex(); //´òÓ¡£¨
+	printlex(); //æ‰“å°ï¼ˆ
 	getsym();
-	printlex(); //´òÓ¡±êÊ¶·û
+	printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 	while (1) {
 		getsym();
 		if (symbol == "RPARENT")break;
-		printlex(); //´òÓ¡¶ººÅ
+		printlex(); //æ‰“å°é€—å·
 		getsym();
-		printlex(); //´òÓ¡±êÊ¶·û
+		printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 	}
-	printlex(); //´òÓ¡£©
-	printsyn("<¶ÁÓï¾ä>");
+	printlex(); //æ‰“å°ï¼‰
+	printsyn("<è¯»è¯­å¥>");
 	getsym();
 }
 
-//Ğ´Óï¾ä*
+//å†™è¯­å¥*
 void wtsta() {
 	if (symbol != "PRINTFTK") error();
-	printlex(); //´òÓ¡printf
+	printlex(); //æ‰“å°printf
 	getsym();
-	printlex(); //´òÓ¡£¨
+	printlex(); //æ‰“å°ï¼ˆ
 	getsym();
 	if (symbol == "STRCON") {
 		str();
 		if (symbol == "COMMA") {
-			printlex(); //´òÓ¡¶ººÅ
+			printlex(); //æ‰“å°é€—å·
 			getsym();
 			expr();
 		}
 	}
 	else expr();
-	printlex(); // ´òÓ¡£©
-	printsyn("<Ğ´Óï¾ä>");
+	printlex(); // æ‰“å°ï¼‰
+	printsyn("<å†™è¯­å¥>");
 	getsym();
 }
 
-//·µ»ØÓï¾ä*
+//è¿”å›è¯­å¥*
 void rsta() {
 	if (symbol != "RETURNTK") error();
 	printlex();
 	getsym();
 	if (symbol != "SEMICN") {
-		printlex(); //´òÓ¡£¨
+		printlex(); //æ‰“å°ï¼ˆ
 		getsym();
 		expr();
-		printlex(); //´òÓ¡£©
+		printlex(); //æ‰“å°ï¼‰
 		getsym();
 	}
-	printsyn("<·µ»ØÓï¾ä>");
+	printsyn("<è¿”å›è¯­å¥>");
 }
 
+//ç¨‹åº*
+void program() {
+	//å¸¸é‡è¯´æ˜
+	if (symbol == "CONSTTK") {
+		cs();
+	}
+	//å˜é‡è¯´æ˜
+	if ((symbol == "INTTK" || symbol == "CHARTK") && !preload(2)) {
+		vs();
+	}
+	//æœ‰|æ— è¿”å›å€¼å‡½æ•°å®šä¹‰
+	while (!(symbol == "VOIDTK" && preload(1) == 2)) {
+		if ((symbol == "INTTK" || symbol == "CHARTK") && preload(2))rfun();
+		else nfun();
+	}
+	mfun();
+	printsyn("<ç¨‹åº>");
+}
 
 int main() {
 	in = fopen("testfile.txt", "rt+");

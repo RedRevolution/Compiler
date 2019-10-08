@@ -18,13 +18,19 @@
     <ClCompile Include="syntax_analysis.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="lexical_analysis.c">
+    <ClCompile Include="lexical_analysis.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="word.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="syntax_analysis.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="lexical_analysis.h">
+      <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
