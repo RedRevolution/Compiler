@@ -4,42 +4,42 @@ IDENFR a
 ASSIGN =
 MINU -
 INTCON 1
-<æ— ç¬¦å·æ•´æ•?
-<æ•´æ•°>
+<ÎÞ·ûºÅÕûÊý>
+<ÕûÊý>
 COMMA ,
 IDENFR b
 ASSIGN =
 PLUS +
 INTCON 2
-<æ— ç¬¦å·æ•´æ•?
-<æ•´æ•°>
+<ÎÞ·ûºÅÕûÊý>
+<ÕûÊý>
 COMMA ,
 IDENFR C_3
 ASSIGN =
 INTCON 3
-<æ— ç¬¦å·æ•´æ•?
-<æ•´æ•°>
+<ÎÞ·ûºÅÕûÊý>
+<ÕûÊý>
 COMMA ,
 IDENFR A
 ASSIGN =
 PLUS +
 INTCON 0
-<æ— ç¬¦å·æ•´æ•?
-<æ•´æ•°>
+<ÎÞ·ûºÅÕûÊý>
+<ÕûÊý>
 COMMA ,
 IDENFR B
 ASSIGN =
 MINU -
 INTCON 0
-<æ— ç¬¦å·æ•´æ•?
-<æ•´æ•°>
+<ÎÞ·ûºÅÕûÊý>
+<ÕûÊý>
 COMMA ,
 IDENFR e_E
 ASSIGN =
 INTCON 999
-<æ— ç¬¦å·æ•´æ•?
-<æ•´æ•°>
-<å¸¸é‡å®šä¹‰>
+<ÎÞ·ûºÅÕûÊý>
+<ÕûÊý>
+<³£Á¿¶¨Òå>
 SEMICN ;
 CONSTTK const
 CHARTK char
@@ -74,20 +74,20 @@ COMMA ,
 IDENFR d_d8
 ASSIGN =
 CHARCON /
-<å¸¸é‡å®šä¹‰>
+<³£Á¿¶¨Òå>
 SEMICN ;
-<å¸¸é‡è¯´æ˜Ž>
+<³£Á¿ËµÃ÷>
 INTTK int
 IDENFR e
 LBRACK [
 INTCON 2
-<æ— ç¬¦å·æ•´æ•?
+<ÎÞ·ûºÅÕûÊý>
 RBRACK ]
 COMMA ,
 IDENFR f
 COMMA ,
 IDENFR A1da_d
-<å˜é‡å®šä¹‰>
+<±äÁ¿¶¨Òå>
 SEMICN ;
 CHARTK char
 IDENFR e0
@@ -97,14 +97,14 @@ COMMA ,
 IDENFR B4
 LBRACK [
 INTCON 1516
-<æ— ç¬¦å·æ•´æ•?
+<ÎÞ·ûºÅÕûÊý>
 RBRACK ]
-<å˜é‡å®šä¹‰>
+<±äÁ¿¶¨Òå>
 SEMICN ;
-<å˜é‡è¯´æ˜Ž>
+<±äÁ¿ËµÃ÷>
 INTTK int
 IDENFR fun1
-<å£°æ˜Žå¤´éƒ¨>
+<ÉùÃ÷Í·²¿>
 LPARENT (
 INTTK int
 IDENFR a1
@@ -114,7 +114,7 @@ IDENFR a2
 COMMA ,
 CHARTK char
 IDENFR a3
-<å‚æ•°è¡?
+<²ÎÊý±í>
 RPARENT )
 LBRACE {
 CONSTTK const
@@ -123,48 +123,51 @@ IDENFR a
 ASSIGN =
 MINU -
 INTCON 10
-<æ— ç¬¦å·æ•´æ•?
-<æ•´æ•°>
-<å¸¸é‡å®šä¹‰>
+<ÎÞ·ûºÅÕûÊý>
+<ÕûÊý>
+<³£Á¿¶¨Òå>
 SEMICN ;
 CONSTTK const
 CHARTK char
 IDENFR c
 ASSIGN =
 CHARCON c
-<å¸¸é‡å®šä¹‰>
+<³£Á¿¶¨Òå>
 SEMICN ;
 CONSTTK const
 CHARTK char
 IDENFR d
 ASSIGN =
 CHARCON d
-<å¸¸é‡å®šä¹‰>
+<³£Á¿¶¨Òå>
 SEMICN ;
-<å¸¸é‡è¯´æ˜Ž>
-SEMICN ;
-<è¯­å¥>
+<³£Á¿ËµÃ÷>
+LBRACE {
+<Óï¾äÁÐ>
+RBRACE }
+<Óï¾ä>
 RETURNTK return
 LPARENT (
 IDENFR a1
-<å› å­>
-<é¡?
+<Òò×Ó>
+<Ïî>
 PLUS +
 IDENFR a2
-<å› å­>
-<é¡?
-<è¡¨è¾¾å¼?
+<Òò×Ó>
+<Ïî>
+<±í´ïÊ½>
 RPARENT )
-<è¿”å›žè¯­å¥>
+<·µ»ØÓï¾ä>
 SEMICN ;
-<è¯­å¥>
-<è¯­å¥åˆ?
-<å¤åˆè¯­å¥>
+<Óï¾ä>
+<Óï¾äÁÐ>
+<¸´ºÏÓï¾ä>
 RBRACE }
-<æœ‰è¿”å›žå€¼å‡½æ•°å®šä¹?
+<ÓÐ·µ»ØÖµº¯Êý¶¨Òå>
+VOIDTK void
 IDENFR fun2
 LPARENT (
-<å‚æ•°è¡?
+<²ÎÊý±í>
 RPARENT )
 LBRACE {
 INTTK int
@@ -173,13 +176,13 @@ COMMA ,
 IDENFR d
 COMMA ,
 IDENFR f
-<å˜é‡å®šä¹‰>
+<±äÁ¿¶¨Òå>
 SEMICN ;
 CHARTK char
 IDENFR ee
-<å˜é‡å®šä¹‰>
+<±äÁ¿¶¨Òå>
 SEMICN ;
-<å˜é‡è¯´æ˜Ž>
+<±äÁ¿ËµÃ÷>
 SCANFTK scanf
 LPARENT (
 IDENFR c
@@ -188,112 +191,105 @@ IDENFR d
 COMMA ,
 IDENFR ee
 RPARENT )
-<è¯»è¯­å?
+<¶ÁÓï¾ä>
 SEMICN ;
-<è¯­å¥>
+<Óï¾ä>
 SCANFTK scanf
 LPARENT (
 IDENFR f
 RPARENT )
-<è¯»è¯­å?
+<¶ÁÓï¾ä>
 SEMICN ;
-<è¯­å¥>
+<Óï¾ä>
 PRINTFTK printf
 LPARENT (
 IDENFR a
-<å› å­>
-<é¡?
-<è¡¨è¾¾å¼?
+<Òò×Ó>
+<Ïî>
+<±í´ïÊ½>
 RPARENT )
-<å†™è¯­å?
+<Ð´Óï¾ä>
 SEMICN ;
-<è¯­å¥>
+<Óï¾ä>
 PRINTFTK printf
 LPARENT (
 STRCON hello world!
-<å­—ç¬¦ä¸?
+<×Ö·û´®>
 RPARENT )
-<å†™è¯­å?
+<Ð´Óï¾ä>
 SEMICN ;
-<è¯­å¥>
+<Óï¾ä>
 PRINTFTK printf
 LPARENT (
 PLUS +
 IDENFR c
-<å› å­>
-<é¡?
-<è¡¨è¾¾å¼?
+<Òò×Ó>
 MULT *
-<å†™è¯­å?
 IDENFR d
-<è¯­å¥>
+<Òò×Ó>
+<Ïî>
 MINU -
-<è¯­å¥>
 IDENFR c
+<Òò×Ó>
+<Ïî>
 PLUS +
 IDENFR e
 LBRACK [
 INTCON 0
-<æ— ç¬¦å·æ•´æ•?
-<æ•´æ•°>
-<å› å­>
-<é¡?
-<è¡¨è¾¾å¼?
+<ÎÞ·ûºÅÕûÊý>
+<ÕûÊý>
+<Òò×Ó>
+<Ïî>
+<±í´ïÊ½>
 RBRACK ]
-<å› å­>
-<é¡?
-<è¡¨è¾¾å¼?
+<Òò×Ó>
+<Ïî>
+<±í´ïÊ½>
 RPARENT )
+<Ð´Óï¾ä>
 SEMICN ;
-<å› å­>
-<é¡?
-<è¡¨è¾¾å¼?
-<èµ‹å€¼è¯­å?
+<Óï¾ä>
 PRINTFTK printf
-<è¯­å¥>
 LPARENT (
-<è¯­å¥>
 STRCON hello world
-<è¯­å¥>
+<×Ö·û´®>
 COMMA ,
-<è¯­å¥>
 MINU -
-<è¯­å¥>
 IDENFR a
+<Òò×Ó>
+<Ïî>
+<±í´ïÊ½>
 RPARENT )
-<å› å­>
-<é¡?
-<è¡¨è¾¾å¼?
+<Ð´Óï¾ä>
 SEMICN ;
+<Óï¾ä>
 RETURNTK return
-<å› å­>
-<é¡?
-<è¡¨è¾¾å¼?
-<èµ‹å€¼è¯­å?
+<·µ»ØÓï¾ä>
 SEMICN ;
-<è¯­å¥>
-<è¯­å¥åˆ?
-<å¤åˆè¯­å¥>
+<Óï¾ä>
+<Óï¾äÁÐ>
+<¸´ºÏÓï¾ä>
 RBRACE }
-<æ— è¿”å›žå€¼å‡½æ•°å®šä¹?
+<ÎÞ·µ»ØÖµº¯Êý¶¨Òå>
+VOIDTK void
 IDENFR fun3
 LPARENT (
 CHARTK char
 IDENFR ddd
-<å‚æ•°è¡?
+<²ÎÊý±í>
 RPARENT )
 LBRACE {
 IDENFR fun2
 LPARENT (
-<å€¼å‚æ•°è¡¨>
+<Öµ²ÎÊý±í>
 RPARENT )
-<æ— è¿”å›žå€¼å‡½æ•°è°ƒç”¨è¯­å?
+<ÎÞ·µ»ØÖµº¯Êýµ÷ÓÃÓï¾ä>
 SEMICN ;
-<è¯­å¥>
-<è¯­å¥åˆ?
-<å¤åˆè¯­å¥>
+<Óï¾ä>
+<Óï¾äÁÐ>
+<¸´ºÏÓï¾ä>
 RBRACE }
-<æ— è¿”å›žå€¼å‡½æ•°å®šä¹?
+<ÎÞ·µ»ØÖµº¯Êý¶¨Òå>
 VOIDTK void
 MAINTK main
 LPARENT (
@@ -301,38 +297,38 @@ RPARENT )
 LBRACE {
 IDENFR fun2
 LPARENT (
-<å€¼å‚æ•°è¡¨>
+<Öµ²ÎÊý±í>
 RPARENT )
-<æ— è¿”å›žå€¼å‡½æ•°è°ƒç”¨è¯­å?
+<ÎÞ·µ»ØÖµº¯Êýµ÷ÓÃÓï¾ä>
 SEMICN ;
-<è¯­å¥>
+<Óï¾ä>
 IDENFR fun1
 LPARENT (
 INTCON 5
-<æ— ç¬¦å·æ•´æ•?
-<æ•´æ•°>
-<å› å­>
-<é¡?
-<è¡¨è¾¾å¼?
+<ÎÞ·ûºÅÕûÊý>
+<ÕûÊý>
+<Òò×Ó>
+<Ïî>
+<±í´ïÊ½>
 COMMA ,
 INTCON 3
-<æ— ç¬¦å·æ•´æ•?
-<æ•´æ•°>
-<å› å­>
-<é¡?
-<è¡¨è¾¾å¼?
+<ÎÞ·ûºÅÕûÊý>
+<ÕûÊý>
+<Òò×Ó>
+<Ïî>
+<±í´ïÊ½>
 COMMA ,
 CHARCON 2
-<å› å­>
-<é¡?
-<è¡¨è¾¾å¼?
-<å€¼å‚æ•°è¡¨>
+<Òò×Ó>
+<Ïî>
+<±í´ïÊ½>
+<Öµ²ÎÊý±í>
 RPARENT )
-<æœ‰è¿”å›žå€¼å‡½æ•°è°ƒç”¨è¯­å?
+<ÓÐ·µ»ØÖµº¯Êýµ÷ÓÃÓï¾ä>
 SEMICN ;
-<è¯­å¥>
-<è¯­å¥åˆ?
-<å¤åˆè¯­å¥>
+<Óï¾ä>
+<Óï¾äÁÐ>
+<¸´ºÏÓï¾ä>
 RBRACE }
-<ä¸»å‡½æ•?
-<ç¨‹åº>
+<Ö÷º¯Êý>
+<³ÌÐò>

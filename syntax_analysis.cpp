@@ -1,4 +1,4 @@
-#include "lexical_analysis.h"
+﻿#include "lexical_analysis.h"
 #include "syntax_analysis.h"
 #include <stdlib.h>
 using namespace std;
@@ -191,6 +191,7 @@ void rfun() {
 //无返回值函数定义*
 void nfun() {
 	if (symbol != "VOIDTK") error();
+	printlex();
 	getsym(); //读入标识符
 	nfunID[nfuncnt++] = token; //打表
 	printlex(); //打印标识符
@@ -244,7 +245,7 @@ void expr() {
 //项*
 void term() {
 	factor();
-	while (symbol == "MUL" || symbol == "DIV") {
+	while (symbol == "MULT" || symbol == "DIV") {
 		printlex();
 		getsym();
 		factor();
@@ -328,6 +329,7 @@ void sta() {
 	}
 	else if (symbol == "LBRACE") {
 		printlex(); //打印 {
+		getsym();
 		stas();
 		printlex(); //打印 }
 		getsym();
