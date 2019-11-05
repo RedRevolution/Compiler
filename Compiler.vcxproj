@@ -125,7 +125,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="sta_callfunc.cpp" />
+    <ClCompile Include="declaration.cpp" />
+    <ClCompile Include="expression.cpp" />
+    <ClCompile Include="function.cpp" />
     <ClCompile Include="lexical_analysis.cpp" />
+    <ClCompile Include="statement.cpp" />
     <ClCompile Include="syntax_analysis.cpp" />
   </ItemGroup>
   <ItemGroup>

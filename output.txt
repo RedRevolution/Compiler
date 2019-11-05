@@ -1,158 +1,64 @@
 CONSTTK const
 INTTK int
-IDENFR a
+IDENFR const1
 ASSIGN =
-MINU -
 INTCON 1
 <无符号整数>
 <整数>
 COMMA ,
-IDENFR b
-ASSIGN =
-PLUS +
-INTCON 2
-<无符号整数>
-<整数>
-COMMA ,
-IDENFR C_3
-ASSIGN =
-INTCON 3
-<无符号整数>
-<整数>
-COMMA ,
-IDENFR A
-ASSIGN =
-PLUS +
-INTCON 0
-<无符号整数>
-<整数>
-COMMA ,
-IDENFR B
+IDENFR const2
 ASSIGN =
 MINU -
-INTCON 0
-<无符号整数>
-<整数>
-COMMA ,
-IDENFR e_E
-ASSIGN =
-INTCON 999
+INTCON 100
 <无符号整数>
 <整数>
 <常量定义>
 SEMICN ;
 CONSTTK const
 CHARTK char
-IDENFR d_d1
-ASSIGN =
-CHARCON +
-COMMA ,
-IDENFR d_d2
-ASSIGN =
-CHARCON -
-COMMA ,
-IDENFR d_d3
-ASSIGN =
-CHARCON 1
-COMMA ,
-IDENFR d_d4
-ASSIGN =
-CHARCON A
-COMMA ,
-IDENFR d_d5
-ASSIGN =
-CHARCON a
-COMMA ,
-IDENFR d_d6
+IDENFR const3
 ASSIGN =
 CHARCON _
-COMMA ,
-IDENFR d_d7
-ASSIGN =
-CHARCON *
-COMMA ,
-IDENFR d_d8
-ASSIGN =
-CHARCON /
 <常量定义>
 SEMICN ;
 <常量说明>
 INTTK int
-IDENFR e
-LBRACK [
-INTCON 2
-<无符号整数>
-RBRACK ]
-COMMA ,
-IDENFR f
-COMMA ,
-IDENFR A1da_d
+IDENFR change1
 <变量定义>
 SEMICN ;
 CHARTK char
-IDENFR e0
-COMMA ,
-IDENFR A2
-COMMA ,
-IDENFR B4
-LBRACK [
-INTCON 1516
-<无符号整数>
-RBRACK ]
+IDENFR change3
 <变量定义>
 SEMICN ;
 <变量说明>
 INTTK int
-IDENFR fun1
+IDENFR gets1
 <声明头部>
 LPARENT (
 INTTK int
-IDENFR a1
+IDENFR var1
 COMMA ,
 INTTK int
-IDENFR a2
-COMMA ,
-CHARTK char
-IDENFR a3
+IDENFR var2
 <参数表>
 RPARENT )
 LBRACE {
-CONSTTK const
-INTTK int
-IDENFR a
+IDENFR change1
 ASSIGN =
-MINU -
-INTCON 10
-<无符号整数>
-<整数>
-<常量定义>
-SEMICN ;
-CONSTTK const
-CHARTK char
-IDENFR c
-ASSIGN =
-CHARCON c
-<常量定义>
-SEMICN ;
-CONSTTK const
-CHARTK char
-IDENFR d
-ASSIGN =
-CHARCON d
-<常量定义>
-SEMICN ;
-<常量说明>
-LBRACE {
-<语句列>
-RBRACE }
-<语句>
-RETURNTK return
-LPARENT (
-IDENFR a1
+IDENFR var1
 <因子>
 <项>
 PLUS +
-IDENFR a2
+IDENFR var2
+<因子>
+<项>
+<表达式>
+<赋值语句>
+SEMICN ;
+<语句>
+RETURNTK return
+LPARENT (
+IDENFR change1
 <因子>
 <项>
 <表达式>
@@ -165,166 +71,43 @@ SEMICN ;
 RBRACE }
 <有返回值函数定义>
 VOIDTK void
-IDENFR fun2
-LPARENT (
-<参数表>
-RPARENT )
-LBRACE {
-INTTK int
-IDENFR c
-COMMA ,
-IDENFR d
-COMMA ,
-IDENFR f
-<变量定义>
-SEMICN ;
-CHARTK char
-IDENFR ee
-<变量定义>
-SEMICN ;
-<变量说明>
-SCANFTK scanf
-LPARENT (
-IDENFR c
-COMMA ,
-IDENFR d
-COMMA ,
-IDENFR ee
-RPARENT )
-<读语句>
-SEMICN ;
-<语句>
-SCANFTK scanf
-LPARENT (
-IDENFR f
-RPARENT )
-<读语句>
-SEMICN ;
-<语句>
-PRINTFTK printf
-LPARENT (
-IDENFR a
-<因子>
-<项>
-<表达式>
-RPARENT )
-<写语句>
-SEMICN ;
-<语句>
-PRINTFTK printf
-LPARENT (
-STRCON hello world!
-<字符串>
-RPARENT )
-<写语句>
-SEMICN ;
-<语句>
-PRINTFTK printf
-LPARENT (
-PLUS +
-IDENFR c
-<因子>
-MULT *
-IDENFR d
-<因子>
-<项>
-MINU -
-IDENFR c
-<因子>
-<项>
-PLUS +
-IDENFR e
-LBRACK [
-INTCON 0
-<无符号整数>
-<整数>
-<因子>
-<项>
-<表达式>
-RBRACK ]
-<因子>
-<项>
-<表达式>
-RPARENT )
-<写语句>
-SEMICN ;
-<语句>
-PRINTFTK printf
-LPARENT (
-STRCON hello world
-<字符串>
-COMMA ,
-MINU -
-IDENFR a
-<因子>
-<项>
-<表达式>
-RPARENT )
-<写语句>
-SEMICN ;
-<语句>
-RETURNTK return
-<返回语句>
-SEMICN ;
-<语句>
-<语句列>
-<复合语句>
-RBRACE }
-<无返回值函数定义>
-VOIDTK void
-IDENFR fun3
-LPARENT (
-CHARTK char
-IDENFR ddd
-<参数表>
-RPARENT )
-LBRACE {
-IDENFR fun2
-LPARENT (
-<值参数表>
-RPARENT )
-<无返回值函数调用语句>
-SEMICN ;
-<语句>
-<语句列>
-<复合语句>
-RBRACE }
-<无返回值函数定义>
-VOIDTK void
 MAINTK main
 LPARENT (
 RPARENT )
 LBRACE {
-IDENFR fun2
+PRINTFTK printf
 LPARENT (
-<值参数表>
+STRCON Hello World
+<字符串>
 RPARENT )
-<无返回值函数调用语句>
+<写语句>
 SEMICN ;
 <语句>
-IDENFR fun1
+PRINTFTK printf
 LPARENT (
-INTCON 5
+IDENFR gets1
+LPARENT (
+INTCON 10
 <无符号整数>
 <整数>
 <因子>
 <项>
 <表达式>
 COMMA ,
-INTCON 3
+INTCON 20
 <无符号整数>
 <整数>
-<因子>
-<项>
-<表达式>
-COMMA ,
-CHARCON 2
 <因子>
 <项>
 <表达式>
 <值参数表>
 RPARENT )
 <有返回值函数调用语句>
+<因子>
+<项>
+<表达式>
+RPARENT )
+<写语句>
 SEMICN ;
 <语句>
 <语句列>

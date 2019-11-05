@@ -3,6 +3,11 @@
 char a;
 string symbol, token;
 FILE* in, * out;
+int line_no = 1;
+
+char error_code[N];
+int error_line[N];
+int error_num = 0;
 
 int isLetter() {
 	return isalpha(a) || a == '_';
@@ -29,10 +34,6 @@ void reserver() {
 	else symbol = "IDENFR";
 }
 
-void strcatAchar() {
-	token += a;
-}
-
 void reserver2() {
 	if (a == '+') symbol = "PLUS";
 	else if (a == '-') symbol = "MINU";
@@ -46,17 +47,22 @@ void reserver2() {
 	else if (a == ']') symbol = "RBRACK";
 	else if (a == '{') symbol = "LBRACE";
 	else if (a == '}') symbol = "RBRACE";
+	else {
+		lexi_error('a'); /*错误处理*/
+		getsym();
+	}
 }
 
 int getsym() {
 	token = "";  //清空字符串
 	if ((a = getc(in)) == EOF) return 0; //先读入一个字符，防止isspace报错
 	while (isspace(a)) {	 /*读取字符，跳过空格、换行和Tab,\t\f等 */
+		if (a == '\n') line_no++;
 		if ((a = getc(in)) == EOF) return 0;
 	}
 	if (isLetter()) {
 		while (isLetter() || isDigit()) {
-			strcatAchar();		/*将字符拼接成字符串 */
+			token += a;		/*将字符拼接成字符串 */
 			a = getc(in);
 		}
 		ungetc(a, in);         /*指针后退一个字符 */
@@ -64,9 +70,13 @@ int getsym() {
 	}
 	//数字
 	else if (isDigit()) {
+		char temp = a;
 		while (isDigit()) {
-			strcatAchar();
+			token += a;
 			a = getc(in);
+		}
+		if (token.length() > 1&& temp == '0') {
+			lexi_error('a', 1);
 		}
 		ungetc(a, in);
 		symbol = "INTCON";
@@ -75,7 +85,21 @@ int getsym() {
 	else if (a == '"') {
 		a = getc(in);
 		while (a != '"') {
-			strcatAchar();
+			/*错误处理*/
+			//注意先判是不是换行符再判非法
+			//字符串同一行中没有配对的右双引号,语法中字符串只在print语句中出现
+			//printf '(' ＜字符串＞,＜表达式＞ ')'| printf '('＜字符串＞ ')'
+			if (a == '\n') {
+				lexi_error('a');
+				ungetc(a, in); //回退换行符
+				//回退到printf结束右括号的前一个字符
+				fseek(in, -1, SEEK_CUR);
+				while (preload(1) != "RPARENT") fseek(in, -1, SEEK_CUR);
+				break;
+			}
+			//字符串中出现非法字符
+			if (!(a == 32 || a == 33 || (a >= 35 && a <= 126)))lexi_error('a');
+			token += a;
 			a = getc(in);
 		}
 		symbol = "STRCON";
@@ -83,16 +107,24 @@ int getsym() {
 	//字符常量
 	else if (a == '\'') {
 		a = getc(in);
-		strcatAchar();
-		a = getc(in);  //执行完后a = ‘‘’
+		/*错误处理*/
+		if(!(a=='+'||a=='-'||a=='*'||a=='/'||isDigit()||isLetter()))lexi_error('a');
+		token += a;
+		a = getc(in); //读右单引号或错误处理 
+		/*错误处理*/
+		//字符常量缺右单引号
+		if (a != '\'') {
+			lexi_error('a');
+			ungetc(a, in);
+		}
 		symbol = "CHARCON";
 	}
 	//大于等于和大于
 	else if (a == '>') {
-		strcatAchar();
+		token += a;
 		a = getc(in);
 		if (a == '=') {
-			strcatAchar();
+			token += a;
 			symbol = "GEQ";
 		}
 		else {
@@ -102,10 +134,10 @@ int getsym() {
 	}
 	//小于等于和小于
 	else if (a == '<') {
-		strcatAchar();
+		token += a;
 		a = getc(in);
 		if (a == '=') {
-			strcatAchar();
+			token += a;
 			symbol = "LEQ";
 		}
 		else {
@@ -115,10 +147,10 @@ int getsym() {
 	}
 	//双等号和赋值
 	else if (a == '=') {
-		strcatAchar();
+		token += a;
 		a = getc(in);
 		if (a == '=') {
-			strcatAchar();
+			token += a;
 			symbol = "EQL";
 		}
 		else {
@@ -128,67 +160,68 @@ int getsym() {
 	}
 	//不等于
 	else if (a == '!') {
-		strcatAchar();
+		token += a;
 		a = getc(in);
-		strcatAchar();
+		if (a != '=') {
+			lexi_error('a', 1);
+		}
+		token += a;
 		symbol = "NEQ";
 	}
 	//其他符号
 	else {
 		reserver2();
-		strcatAchar();
+		token += a;
 	}
 	return 1;
 }
 
-//指针移回到当前已读出单词的开头位置
-void ungetsym() {
-	fseek(in, -token.length() , SEEK_CUR); 
-}
+//预读接下来第x个单词的类型
+string preload(int x) {
+	long preaddr,nowaddr;
+	string ttmp, stmp, type; //对当前单词进行备份
+	int line_no_pre;
 
-
-//预读  int|char+标识符 下一个单词(字符)  x = 2
-//预读下一个单词   x = 1
-int preload(int x) {
-	int value = 0, count;
-	string ttmp, stmp; //对当前单词进行备份
 	ttmp = token;
 	stmp = symbol;
+	line_no_pre = line_no;
+	preaddr = ftell(in);
 	
-	if (x == 1) {
-		getsym();
-		if (symbol == "LPARENT")value = 1;
-		if (symbol == "MAINTK")value = 2;
-		ungetsym();
-		token = ttmp;//还原备份
-		symbol = stmp;
-		return value;
-	}
-
-	getsym(); //取得标识符
-	count = token.length(); //标识符的长度
-
-	//读下一个单词，空格也需计数
-	a = getc(in);
-	count++;
-	while (isspace(a)) {
-		a = getc(in);
-		count++;
-	}
-	if (a == '(')value = 1; //如果为"(" 表示是函数，返回1
+	for (int i = 0; i < x; i++) getsym();
 	
-	fseek(in, -count, SEEK_CUR); //回退count个长度的字符
+	type = symbol;
 
+	nowaddr = ftell(in);
+	fseek(in, preaddr - nowaddr, SEEK_CUR); 
+	//fseek(in, -count, SEEK_CUR); //回退count个长度的字符
+	
 	token = ttmp;//还原备份
 	symbol = stmp;
-	return value;
+	line_no = line_no_pre;
+	return type;
 }
+
 
 //打印当前单词
 void printlex() {
-	fputs(symbol.c_str(), out);
-	fputs(" ", out);
-	fputs(token.c_str(), out);
-	fputs("\n", out);
+	//fputs(symbol.c_str(), out);
+	//fputs(" ", out);
+	//fputs(token.c_str(), out);
+	//fputs("\n", out);
 }
 
+void add_error(char code,int line) {
+	for (int i = 0; i < error_num; i++) {
+		if (error_code[i] == code && error_line[i] == line) {
+			return;
+		}
+	}
+	error_code[error_num] = code;
+	error_line[error_num++] = line;
+}
+
+
+void lexi_error(char code,int codeline) {
+	//if (DEBUG) fprintf(out, "%d %c   %d\n", line_no, code, codeline); //打印对应error处理的代码行
+	add_error(code, line_no);
+}
