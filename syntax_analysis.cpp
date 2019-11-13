@@ -16,6 +16,7 @@ void syntax_error(char code, int index) {
 		else fprintf(out, "%d %c\n", line_no, code);
 	}*/
 
+
 	//找到前面有几个换行符
 	long nowaddr = ftell(in);
 	int count = 0;
