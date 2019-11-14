@@ -53,6 +53,14 @@ void reserver2() {
 	}
 }
 
+string getAscill() {
+	char temp[100];
+	string ret;
+	sprintf(temp, "%d", (int)token[0]);
+	ret = temp;
+	return ret;
+}
+
 int getsym() {
 	token = "";  //清空字符串
 	if ((a = getc(in)) == EOF) return 0; //先读入一个字符，防止isspace报错

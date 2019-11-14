@@ -36,16 +36,31 @@
     <ClCompile Include="sta_callfunc.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="compiler.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="generateMcode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="generateObjcode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="word.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="syntax_analysis.h">
-      <Filter>源文件</Filter>
+    <ClInclude Include="generateMcode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="generateObjcode.h">
+      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="lexical_analysis.h">
-      <Filter>源文件</Filter>
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="syntax_analysis.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
