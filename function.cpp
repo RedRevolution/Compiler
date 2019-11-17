@@ -1,93 +1,93 @@
-#include "syntax_analysis.h"
+ï»¿#include "syntax_analysis.h"
 #include "generateMcode.h"
 
-//ÉùÃ÷Í·²¿*
+//å£°æ˜å¤´éƒ¨*
 void dh(string& func_name) { 
 	if (!HandleError) {
-		string ret_type, funcname;
+		string ret_type;
 		if (symbol != "INTTK" && symbol != "CHARTK") error();
 		ret_type = symbol;
 		printlex();
-		getsym(); //±êÊ¶·û
-		funcname = token;
-		printlex(); //´òÓ¡±êÊ¶·û
-		syt[0].add_entry(funcname, "FUNC", ret_type, to_string(level));
-		printsyn("<ÉùÃ÷Í·²¿>");
+		getsym(); //æ ‡è¯†ç¬¦
+		func_name = token;
+		printlex(); //æ‰“å°æ ‡è¯†ç¬¦
+		syt[0].add_entry(func_name, "FUNC", ret_type, to_string(level));
+		printsyn("<å£°æ˜å¤´éƒ¨>");
 		getsym();
 	}
 	//else {
 	//	string ret_type;
 	//	if (symbol != "INTTK" && symbol != "CHARTK") error();
 	//	ret_type = symbol;
-	//	printlex(); //´òÓ¡int|char
-	//	getsym(); //±êÊ¶·û
+	//	printlex(); //æ‰“å°int|char
+	//	getsym(); //æ ‡è¯†ç¬¦
 	//	func_name = token;
-	//	/*´íÎó´¦Àí*/
+	//	/*é”™è¯¯å¤„ç†*/
 	//	if (!global.add_entry(func_name, "FUNC", ret_type)) {
 	//		syntax_error('b', 11);
 	//	}
-	//	printlex(); //´òÓ¡±êÊ¶·û
-	//	printsyn("<ÉùÃ÷Í·²¿>");
+	//	printlex(); //æ‰“å°æ ‡è¯†ç¬¦
+	//	printsyn("<å£°æ˜å¤´éƒ¨>");
 	//	getsym();
 	//}
 }
 
 
-//²ÎÊı±í*
+//å‚æ•°è¡¨*
 void pt(string func_name) {
 	if (!HandleError) {
 		string ret_type, pr_name;
-		//²ÎÊı²»Îª¿Õ
+		//å‚æ•°ä¸ä¸ºç©º
 		if (symbol == "INTTK" || symbol == "CHARTK") {
 			ret_type = symbol;
-			printlex(); //´òÓ¡ int|char
+			printlex(); //æ‰“å° int|char
 			while (1) {
-				getsym(); //¶ÁÈë±êÊ¶·û
+				getsym(); //è¯»å…¥æ ‡è¯†ç¬¦
 				pr_name = token;
 				syt[0].add_pt_entry(func_name, pr_name, ret_type);
 				syt[level].add_entry(pr_name, "VAR", ret_type, "");
 				emit("Para", ret_type, pr_name, "");
-				printlex(); //´òÓ¡±êÊ¶·û
-				getsym(); //¶ÁÈë¶ººÅ»òÕß£©
+				printlex(); //æ‰“å°æ ‡è¯†ç¬¦
+				getsym(); //è¯»å…¥é€—å·æˆ–è€…ï¼‰
 				if (symbol != "COMMA")break;
-				printlex(); //´òÓ¡¶ººÅ
-				getsym(); //¶ÁÈë int|char
+				printlex(); //æ‰“å°é€—å·
+				getsym(); //è¯»å…¥ int|char
 				ret_type = symbol;
-				printlex(); //´òÓ¡ int|char
+				printlex(); //æ‰“å° int|char
 			}
 		}
-		printsyn("<²ÎÊı±í>");
+		printsyn("<å‚æ•°è¡¨>");
 	}
 	//else {
 	//	string pr_name;
 	//	string ret_type;
-	//	//²ÎÊı²»Îª¿Õ
+	//	//å‚æ•°ä¸ä¸ºç©º
 	//	if (symbol == "INTTK" || symbol == "CHARTK") {
 	//		ret_type = symbol;
-	//		printlex(); //´òÓ¡ int|char
+	//		printlex(); //æ‰“å° int|char
 	//		while (1) {
-	//			getsym(); //¶ÁÈë±êÊ¶·û
+	//			getsym(); //è¯»å…¥æ ‡è¯†ç¬¦
 	//			pr_name = token;
-	//			//¼ÓÈëº¯Êıfunc_nameµÄ²ÎÊı±í
+	//			//åŠ å…¥å‡½æ•°func_nameçš„å‚æ•°è¡¨
 	//			if (!global.add_pt_entry(func_name, pr_name, ret_type)) {
-	//				/*´íÎó´¦Àí*/
-	//				syntax_error('b', 12);  //²ÎÊıÃûÖØ¶¨Òå
+	//				/*é”™è¯¯å¤„ç†*/
+	//				syntax_error('b', 12);  //å‚æ•°åé‡å®šä¹‰
 	//			}
-	//			p.add_entry(pr_name, "VAR", ret_type); //½«²ÎÊı±íÖĞµÄ²ÎÊı¼ÓÈë¾Ö²¿±äÁ¿Çø
-	//			printlex(); //´òÓ¡±êÊ¶·û
-	//			getsym(); //¶ÁÈë¶ººÅ»òÕß£©
+	//			p.add_entry(pr_name, "VAR", ret_type); //å°†å‚æ•°è¡¨ä¸­çš„å‚æ•°åŠ å…¥å±€éƒ¨å˜é‡åŒº
+	//			printlex(); //æ‰“å°æ ‡è¯†ç¬¦
+	//			getsym(); //è¯»å…¥é€—å·æˆ–è€…ï¼‰
 	//			if (symbol != "COMMA")break;
-	//			printlex(); //´òÓ¡¶ººÅ
-	//			getsym(); //¶ÁÈë int|char
+	//			printlex(); //æ‰“å°é€—å·
+	//			getsym(); //è¯»å…¥ int|char
 	//			ret_type = symbol;
-	//			printlex(); //´òÓ¡ int|char
+	//			printlex(); //æ‰“å° int|char
 	//		}
 	//	}
-	//	printsyn("<²ÎÊı±í>");
+	//	printsyn("<å‚æ•°è¡¨>");
 	//}
 }
 
-//ÓĞ·µ»ØÖµº¯Êı¶¨Òå*
+//æœ‰è¿”å›å€¼å‡½æ•°å®šä¹‰*
 void rfun() {
 	if (!HandleError) {
 		string funcname, ret_type;
@@ -95,19 +95,19 @@ void rfun() {
 		if (symbol != "INTTK" && symbol != "CHARTK") error();
 		ret_type = symbol;
 		dh(funcname);
-		printlex(); //´òÓ¡£¨
+		printlex(); //æ‰“å°ï¼ˆ
 		syt[level].add_entry(funcname, "FUNC", ret_type,to_string(level));
 		emit("Func", "", funcname, "");
 		getsym();
 		pt(funcname);
-		printlex(); //´òÓ¡£©
+		printlex(); //æ‰“å°ï¼‰
 		getsym();
-		printlex(); //´òÓ¡{
+		printlex(); //æ‰“å°{
 		getsym();
 		costa();
-		printlex(); //´òÓ¡}
+		printlex(); //æ‰“å°}
 		emit("End", "", "", "$End_" + funcname);
-		printsyn("<ÓĞ·µ»ØÖµº¯Êı¶¨Òå>");
+		printsyn("<æœ‰è¿”å›å€¼å‡½æ•°å®šä¹‰>");
 		getsym();
 	}
 	//else {
@@ -117,137 +117,137 @@ void rfun() {
 	//	if (symbol != "INTTK" && symbol != "CHARTK") error();
 	//	func_type = symbol;
 	//	dh(func_name);
-	//	printlex(); //´òÓ¡£¨
+	//	printlex(); //æ‰“å°ï¼ˆ
 	//	getsym();
-	//	//¾Ö²¿·ûºÅ±íµÄµÚÒ»Ïî×¢²á¸Ãº¯ÊıµÄ»ù±¾ĞÅÏ¢
+	//	//å±€éƒ¨ç¬¦å·è¡¨çš„ç¬¬ä¸€é¡¹æ³¨å†Œè¯¥å‡½æ•°çš„åŸºæœ¬ä¿¡æ¯
 	//	p.add_entry(func_name, "FUNC", func_type);
 	//	pt(func_name, p);
-	//	/* ´íÎó´¦Àí */
+	//	/* é”™è¯¯å¤„ç† */
 	//	if (symbol != "RPARENT") {
-	//		syntax_error('l', 1); //Ó¦ÎªÓÒĞ¡À¨ºÅ
+	//		syntax_error('l', 1); //åº”ä¸ºå³å°æ‹¬å·
 	//	}
 	//	else {
-	//		printlex(); //´òÓ¡)
+	//		printlex(); //æ‰“å°)
 	//		getsym();
 	//	}
-	//	printlex(); //´òÓ¡{
+	//	printlex(); //æ‰“å°{
 	//	getsym();
 	//	costa(p);
-	//	printlex(); //´òÓ¡}
-	//	printsyn("<ÓĞ·µ»ØÖµº¯Êı¶¨Òå>");
+	//	printlex(); //æ‰“å°}
+	//	printsyn("<æœ‰è¿”å›å€¼å‡½æ•°å®šä¹‰>");
 	//	getsym();
 	//}
 }
 
-//ÎŞ·µ»ØÖµº¯Êı¶¨Òå*
+//æ— è¿”å›å€¼å‡½æ•°å®šä¹‰*
 void nfun() {
 	if (!HandleError) {
 		string funcname;
 		if (symbol != "VOIDTK") error();
 		printlex();
-		getsym(); //¶ÁÈë±êÊ¶·û
+		getsym(); //è¯»å…¥æ ‡è¯†ç¬¦
 		funcname = token;
-		printlex(); //´òÓ¡±êÊ¶·û
+		printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 		syt[0].add_entry(funcname, "FUNC", "VOIDTK", to_string(level));
 		syt[level].add_entry(funcname, "FUNC", "VOIDTK", to_string(level));
 		emit("Func", "", funcname, "");
 		getsym();
-		printlex(); //´òÓ¡£¨
+		printlex(); //æ‰“å°ï¼ˆ
 		getsym();
 		pt(funcname);
-		printlex(); //´òÓ¡£©
+		printlex(); //æ‰“å°ï¼‰
 		getsym();
-		printlex(); //´òÓ¡{
+		printlex(); //æ‰“å°{
 		getsym();
 		costa();
-		printlex(); //´òÓ¡}
+		printlex(); //æ‰“å°}
 		emit("End", "", "", "$End_" + funcname);
-		printsyn("<ÎŞ·µ»ØÖµº¯Êı¶¨Òå>");
+		printsyn("<æ— è¿”å›å€¼å‡½æ•°å®šä¹‰>");
 		getsym();
 	}
 	//else {
 	//	Symtable p;
 	//	string func_name;
 	//	if (symbol != "VOIDTK") error();
-	//	printlex(); //´òÓ¡void
-	//	getsym(); //¶ÁÈë±êÊ¶·û
+	//	printlex(); //æ‰“å°void
+	//	getsym(); //è¯»å…¥æ ‡è¯†ç¬¦
 	//	func_name = token;
-	//	//¾Ö²¿·ûºÅ±íµÄµÚÒ»Ïî×¢²á¸Ãº¯ÊıµÄ»ù±¾ĞÅÏ¢
+	//	//å±€éƒ¨ç¬¦å·è¡¨çš„ç¬¬ä¸€é¡¹æ³¨å†Œè¯¥å‡½æ•°çš„åŸºæœ¬ä¿¡æ¯
 	//	p.add_entry(func_name, "FUNC", "VOIDTK");
-	//	/*´íÎó´¦Àí*/
+	//	/*é”™è¯¯å¤„ç†*/
 	//	if (!global.add_entry(func_name, "FUNC", "VOIDTK")) {
 	//		syntax_error('b', 13);
 	//	}
-	//	printlex(); //´òÓ¡±êÊ¶·û
+	//	printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 	//	getsym();
-	//	printlex(); //´òÓ¡£¨
+	//	printlex(); //æ‰“å°ï¼ˆ
 	//	getsym();
 	//	pt(func_name, p);
-	//	/* ´íÎó´¦Àí */
+	//	/* é”™è¯¯å¤„ç† */
 	//	if (symbol != "RPARENT") {
-	//		syntax_error('l', 1); //Ó¦ÎªÓÒĞ¡À¨ºÅ
+	//		syntax_error('l', 1); //åº”ä¸ºå³å°æ‹¬å·
 	//	}
 	//	else {
-	//		printlex(); //´òÓ¡)
+	//		printlex(); //æ‰“å°)
 	//		getsym();
 	//	}
-	//	printlex(); //´òÓ¡{
+	//	printlex(); //æ‰“å°{
 	//	getsym();
 	//	costa(p);
-	//	printlex(); //´òÓ¡}
-	//	printsyn("<ÎŞ·µ»ØÖµº¯Êı¶¨Òå>");
+	//	printlex(); //æ‰“å°}
+	//	printsyn("<æ— è¿”å›å€¼å‡½æ•°å®šä¹‰>");
 	//	getsym();
 	//}
 }
 
-//Ö÷º¯Êı*
+//ä¸»å‡½æ•°*
 void mfun() {
 	if (!HandleError) {
 		if (symbol != "VOIDTK") error();
-		printlex(); //´òÓ¡void
-		getsym(); //¶ÁÈë±êÊ¶·ûmain
-		printlex(); //´òÓ¡±êÊ¶·ûmain
+		printlex(); //æ‰“å°void
+		getsym(); //è¯»å…¥æ ‡è¯†ç¬¦main
+		printlex(); //æ‰“å°æ ‡è¯†ç¬¦main
 		syt[0].add_entry("main", "FUNC", "VOIDTK", to_string(level));
 		syt[level].add_entry("main", "FUNC", "VOIDTK", to_string(level));
 		emit("Func", "", "main", "");
 		getsym();
-		printlex(); //´òÓ¡£¨
+		printlex(); //æ‰“å°ï¼ˆ
 		getsym();
-		printlex(); //´òÓ¡£©
+		printlex(); //æ‰“å°ï¼‰
 		getsym();
-		printlex(); //´òÓ¡{
+		printlex(); //æ‰“å°{
 		getsym();
 		costa();
-		printlex(); //´òÓ¡}
+		printlex(); //æ‰“å°}
 		emit("End", "", "", "$End_main");
-		printsyn("<Ö÷º¯Êı>"); //Ö÷º¯Êı½áÊøÎŞĞëgetsym
+		printsyn("<ä¸»å‡½æ•°>"); //ä¸»å‡½æ•°ç»“æŸæ— é¡»getsym
 	}
 	//else {
 	//	Symtable p;
 	//	if (symbol != "VOIDTK") error();
-	//	printlex(); //´òÓ¡void
-	//	getsym(); //¶ÁÈë±êÊ¶·ûmain
-	//	/*´íÎó´¦Àí*/
+	//	printlex(); //æ‰“å°void
+	//	getsym(); //è¯»å…¥æ ‡è¯†ç¬¦main
+	//	/*é”™è¯¯å¤„ç†*/
 	//	if (!global.add_entry("main", "FUNC", "VOIDTK")) {
 	//		syntax_error('b', 14);
 	//	}
 	//	p.add_entry("main", "FUNC", "VOIDTK");
-	//	printlex(); //´òÓ¡±êÊ¶·ûmain
+	//	printlex(); //æ‰“å°æ ‡è¯†ç¬¦main
 	//	getsym();
-	//	printlex(); //´òÓ¡£¨
+	//	printlex(); //æ‰“å°ï¼ˆ
 	//	getsym();
-	//	/* ´íÎó´¦Àí */
+	//	/* é”™è¯¯å¤„ç† */
 	//	if (symbol != "RPARENT") {
-	//		syntax_error('l', 1); //Ó¦ÎªÓÒĞ¡À¨ºÅ
+	//		syntax_error('l', 1); //åº”ä¸ºå³å°æ‹¬å·
 	//	}
 	//	else {
-	//		printlex(); //´òÓ¡)
+	//		printlex(); //æ‰“å°)
 	//		getsym();
 	//	}
-	//	printlex(); //´òÓ¡{
+	//	printlex(); //æ‰“å°{
 	//	getsym();
 	//	costa(p);
-	//	printlex(); //´òÓ¡}
-	//	printsyn("<Ö÷º¯Êı>"); //Ö÷º¯Êı½áÊøÎŞĞëgetsym
+	//	printlex(); //æ‰“å°}
+	//	printsyn("<ä¸»å‡½æ•°>"); //ä¸»å‡½æ•°ç»“æŸæ— é¡»getsym
 	//}
 }

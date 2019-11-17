@@ -1,12 +1,12 @@
-#include "syntax_analysis.h"
+ï»¿#include "syntax_analysis.h"
 
-//¸´ºÏÓï¾ä*
+//å¤åˆè¯­å¥*
 void costa() {
 	if (!HandleError) {
 		if (symbol == "CONSTTK")cs();
 		if (symbol == "INTTK" || symbol == "CHARTK")vs();
 		stas();
-		printsyn("<¸´ºÏÓï¾ä>");
+		printsyn("<å¤åˆè¯­å¥>");
 	}
 	//else {
 	//	hasreturn = false;
@@ -14,25 +14,25 @@ void costa() {
 	//	if (symbol == "INTTK" || symbol == "CHARTK")vs(p);
 	//	stas(p);
 	//	if (p.sym[0].ret_type != "VOIDTK" && !hasreturn) {
-	//		syntax_error('h', 1); //ÓĞ·µ»ØÖµº¯ÊıÃ»ÓĞreturnÓï¾ä
+	//		syntax_error('h', 1); //æœ‰è¿”å›å€¼å‡½æ•°æ²¡æœ‰returnè¯­å¥
 	//	}
-	//	printsyn("<¸´ºÏÓï¾ä>");
+	//	printsyn("<å¤åˆè¯­å¥>");
 	//}
 }
 
 
-//Óï¾ä*
+//è¯­å¥*
 int sta() {
 	if(!HandleError){
 		if (symbol == "IDENFR") {
-			if (preload(1) == "LPARENT") {  //º¯Êıµ÷ÓÃ
+			if (preload(1) == "LPARENT") {  //å‡½æ•°è°ƒç”¨
 				callrfun();
-				printlex(); //´òÓ¡·ÖºÅ
+				printlex(); //æ‰“å°åˆ†å·
 				getsym();
 			}
-			else {	//¸³ÖµÓï¾ä
+			else {	//èµ‹å€¼è¯­å¥
 				assta();
-				printlex(); //´òÓ¡·ÖºÅ
+				printlex(); //æ‰“å°åˆ†å·
 				getsym();
 			}
 		}
@@ -44,61 +44,62 @@ int sta() {
 		}
 		else if (symbol == "RETURNTK") {
 			rsta();
-			printlex(); //´òÓ¡·ÖºÅ
+			printlex(); //æ‰“å°åˆ†å·
 			getsym();
 		}
 		else if (symbol == "SCANFTK") {
 			rdsta();
-			printlex(); //´òÓ¡·ÖºÅ
+			printlex(); //æ‰“å°åˆ†å·
 			getsym();
 		}
 		else if (symbol == "PRINTFTK") {
 			wtsta();
-			printlex(); //´òÓ¡·ÖºÅ
+			printlex(); //æ‰“å°åˆ†å·
 			getsym();
 		}
 		else if (symbol == "LBRACE") {
-			printlex(); //´òÓ¡ {
+			printlex(); //æ‰“å° {
 			getsym();
 			stas();
-			printlex(); //´òÓ¡ }
+			printlex(); //æ‰“å° }
 			getsym();
 		}
-		else { //¿ÕÓï¾ä
-			printlex(); //´òÓ¡·ÖºÅ
+		else { //ç©ºè¯­å¥
+			printlex(); //æ‰“å°åˆ†å·
 			getsym();
 		}
-		printsyn("<Óï¾ä>");
+		printsyn("<è¯­å¥>");
+		return 0;
 	}
 	//else {
-	//	int ret_v = 0; //±êÊ¶¸ÃÓï¾äÊÇ·ñÊÇ·µ»ØÓï¾ä
+	//	int ret_v = 0; //æ ‡è¯†è¯¥è¯­å¥æ˜¯å¦æ˜¯è¿”å›è¯­å¥
 	//	if (symbol == "IDENFR") {
-	//		if (preload(1) == "LPARENT") {  //º¯Êıµ÷ÓÃ
-	//			/* ´íÎó´¦Àí */
+	//		if (preload(1) == "LPARENT") {  //å‡½æ•°è°ƒç”¨
+	//			/* é”™è¯¯å¤„ç† */
 	//			if (global.search_nfun(token) != -1) callnfun(p);
 	//			else if (global.search_rfun(token) != -1) callrfun(p);
 	//			else {
-	//				syntax_error('c', 1); //Î´¶¨ÒåµÄº¯Êı
-	//				while (symbol != "RPARENT")getsym(); //Ìøµ½º¯Êıµ÷ÓÃÓï¾äÎ²²¿
+	//				syntax_error('c', 1); //æœªå®šä¹‰çš„å‡½æ•°
+	//				while (symbol != "RPARENT")getsym(); //è·³åˆ°å‡½æ•°è°ƒç”¨è¯­å¥å°¾éƒ¨
 	//				getsym();
 	//			}
-	//			/* ´íÎó´¦Àí */
+	//			/* é”™è¯¯å¤„ç† */
 	//			if (symbol != "SEMICN") {
-	//				syntax_error('k', 1); //Ó¦Îª·ÖºÅ
+	//				syntax_error('k', 1); //åº”ä¸ºåˆ†å·
 	//			}
 	//			else {
-	//				printlex(); //´òÓ¡·ÖºÅ
+	//				printlex(); //æ‰“å°åˆ†å·
 	//				getsym();
 	//			}
 	//		}
-	//		else {	//¸³ÖµÓï¾ä
+	//		else {	//èµ‹å€¼è¯­å¥
 	//			assta(p);
-	//			/* ´íÎó´¦Àí */
+	//			/* é”™è¯¯å¤„ç† */
 	//			if (symbol != "SEMICN") {
-	//				syntax_error('k', 1); //Ó¦Îª·ÖºÅ
+	//				syntax_error('k', 1); //åº”ä¸ºåˆ†å·
 	//			}
 	//			else {
-	//				printlex(); //´òÓ¡·ÖºÅ
+	//				printlex(); //æ‰“å°åˆ†å·
 	//				getsym();
 	//			}
 	//		}
@@ -111,67 +112,67 @@ int sta() {
 	//	}
 	//	else if (symbol == "RETURNTK") {
 	//		rsta(p);
-	//		/* ´íÎó´¦Àí */
+	//		/* é”™è¯¯å¤„ç† */
 	//		if (symbol != "SEMICN") {
-	//			syntax_error('k', 1); //Ó¦Îª·ÖºÅ
+	//			syntax_error('k', 1); //åº”ä¸ºåˆ†å·
 	//		}
 	//		else {
-	//			printlex(); //´òÓ¡·ÖºÅ
+	//			printlex(); //æ‰“å°åˆ†å·
 	//			getsym();
 	//		}
 	//		ret_v = 1;
 	//	}
 	//	else if (symbol == "SCANFTK") {
 	//		rdsta(p);
-	//		/* ´íÎó´¦Àí */
+	//		/* é”™è¯¯å¤„ç† */
 	//		if (symbol != "SEMICN") {
-	//			syntax_error('k', 1); //Ó¦Îª·ÖºÅ
+	//			syntax_error('k', 1); //åº”ä¸ºåˆ†å·
 	//		}
 	//		else {
-	//			printlex(); //´òÓ¡·ÖºÅ
+	//			printlex(); //æ‰“å°åˆ†å·
 	//			getsym();
 	//		}
 	//	}
 	//	else if (symbol == "PRINTFTK") {
 	//		wtsta(p);
-	//		/* ´íÎó´¦Àí */
+	//		/* é”™è¯¯å¤„ç† */
 	//		if (symbol != "SEMICN") {
-	//			syntax_error('k', 1); //Ó¦Îª·ÖºÅ
+	//			syntax_error('k', 1); //åº”ä¸ºåˆ†å·
 	//		}
 	//		else {
-	//			printlex(); //´òÓ¡·ÖºÅ
+	//			printlex(); //æ‰“å°åˆ†å·
 	//			getsym();
 	//		}
 	//	}
 	//	else if (symbol == "LBRACE") {
-	//		printlex(); //´òÓ¡ {
+	//		printlex(); //æ‰“å° {
 	//		getsym();
 	//		stas(p);
-	//		printlex(); //´òÓ¡ }
+	//		printlex(); //æ‰“å° }
 	//		getsym();
 	//	}
-	//	else { //¿ÕÓï¾ä
-	//		/* ´íÎó´¦Àí */
+	//	else { //ç©ºè¯­å¥
+	//		/* é”™è¯¯å¤„ç† */
 	//		if (symbol != "SEMICN") {
-	//			syntax_error('k', 1); //Ó¦Îª·ÖºÅ
+	//			syntax_error('k', 1); //åº”ä¸ºåˆ†å·
 	//		}
 	//		else {
-	//			printlex(); //´òÓ¡·ÖºÅ
+	//			printlex(); //æ‰“å°åˆ†å·
 	//			getsym();
 	//		}
 	//	}
-	//	printsyn("<Óï¾ä>");
+	//	printsyn("<è¯­å¥>");
 	//	return ret_v;
 	//}
 }
 
-//¸³ÖµÓï¾ä*
+//èµ‹å€¼è¯­å¥*
 void assta() {
 	if (!HandleError) {
 		if (symbol != "IDENFR") error();
 		string l_name, r_name;
 		l_name = token;
-		printlex(); //´òÓ¡±êÊ¶·û
+		printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 		getsym();
 		if (symbol == "ASSIGN") {
 			printlex();
@@ -181,37 +182,37 @@ void assta() {
 		}
 		else {
 			string arr_index;
-			printlex(); //´òÓ¡[
+			printlex(); //æ‰“å°[
 			getsym();
 			expr(arr_index);
-			printlex(); //´òÓ¡]
+			printlex(); //æ‰“å°]
 			getsym();
-			printlex(); //´òÓ¡=
+			printlex(); //æ‰“å°=
 			getsym();
 			expr(r_name);
 			emit("[]=", l_name, arr_index, r_name);
 		}
-		printsyn("<¸³ÖµÓï¾ä>");
+		printsyn("<èµ‹å€¼è¯­å¥>");
 	}
 	//else {
 	//	if (symbol != "IDENFR") error();
-	//	/* ´íÎó´¦Àí */
+	//	/* é”™è¯¯å¤„ç† */
 	//	int index_l = p.search_vname(token);
 	//	int index_g = global.search_vname(token);
 	//	if (index_l == -1 && index_g == -1) {
-	//		syntax_error('c', 3);  //Ãû×ÖÎ´¶¨Òå
+	//		syntax_error('c', 3);  //åå­—æœªå®šä¹‰
 	//	}
 	//	if (index_l != -1) {
 	//		if (p.sym[index_l].type == "CONSTTK") {
-	//			syntax_error('j', 1); //¸Ä±ä³£Á¿µÄÖµ
+	//			syntax_error('j', 1); //æ”¹å˜å¸¸é‡çš„å€¼
 	//		}
 	//	}
 	//	if (index_l == -1 && index_g != -1) {
 	//		if (global.sym[index_g].type == "CONSTTK") {
-	//			syntax_error('j', 2); //¸Ä±ä³£Á¿µÄÖµ
+	//			syntax_error('j', 2); //æ”¹å˜å¸¸é‡çš„å€¼
 	//		}
 	//	}
-	//	printlex(); //´òÓ¡±êÊ¶·û
+	//	printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 	//	getsym();
 	//	if (symbol == "ASSIGN") {
 	//		printlex();
@@ -219,51 +220,44 @@ void assta() {
 	//		expr(p);
 	//	}
 	//	else {
-	//		printlex(); //´òÓ¡[
+	//		printlex(); //æ‰“å°[
 	//		getsym();
 	//		if (expr(p) != "INTTK") {
 	//			syntax_error('i', 1);
 	//		}
-	//		/* ´íÎó´¦Àí */
+	//		/* é”™è¯¯å¤„ç† */
 	//		if (symbol != "RBRACK") {
-	//			syntax_error('m', 1); //Ó¦ÎªÓÒÖĞÀ¨ºÅ
+	//			syntax_error('m', 1); //åº”ä¸ºå³ä¸­æ‹¬å·
 	//		}
 	//		else {
-	//			printlex(); //´òÓ¡]
+	//			printlex(); //æ‰“å°]
 	//			getsym();
 	//		}
-	//		printlex(); //´òÓ¡=
+	//		printlex(); //æ‰“å°=
 	//		getsym();
 	//		expr(p);
 	//	}
-	//	printsyn("<¸³ÖµÓï¾ä>");
+	//	printsyn("<èµ‹å€¼è¯­å¥>");
 	//}
 }
 
-//Ìõ¼şÓï¾ä*
+//æ¡ä»¶è¯­å¥*
 void cdsta() {
 	if (!HandleError) {
 		string jum_lab = "", last_lab = "",temp;
-		//int curRegNum = getRegNum();
 		if (symbol != "IFTK")error();
 		printlex();
 		getsym();
-		/* debug */
-		emit("Debug", "ifstart", "" , "");
-		printlex(); //´òÓ¡£¨
+		printlex(); //æ‰“å°ï¼ˆ
 		getsym();
 		condition(jum_lab,false,temp);
-		printlex(); //´òÓ¡£©
+		printlex(); //æ‰“å°ï¼‰
 		getsym();
 		sta();
 		last_lab = jum_lab;
-		//resetRegNum(curRegNum);
-		/* debug */
-		emit("Debug", "ifend", "", "");
+
 		if (symbol == "ELSETK") {
-			/* debug */
-			emit("Debug", "elsestart", "", "");
-			jum_lab = newReg();
+			jum_lab = newLab();
 			printlex();
 			emit("Jmp", jum_lab, "", "");
 			emit("Lab", last_lab, "", "");
@@ -271,48 +265,45 @@ void cdsta() {
 			getsym();
 			sta();
 			emit("Lab", jum_lab, "", "");
-			/* debug */
-			emit("Debug", "elseend", "", "");
 		}
 		else {
 			emit("Lab", jum_lab, "", "");
 		}
-		printsyn("<Ìõ¼şÓï¾ä>");
+		printsyn("<æ¡ä»¶è¯­å¥>");
 	}
 	//else {
 	//	if (symbol != "IFTK")error();
 	//	printlex();
 	//	getsym();
-	//	printlex(); //´òÓ¡£¨
+	//	printlex(); //æ‰“å°ï¼ˆ
 	//	getsym();
 	//	condition(p);
 	//	if (symbol != "RPARENT") {
-	//		syntax_error('l', 1); //Ó¦ÎªÓÒĞ¡À¨ºÅ
+	//		syntax_error('l', 1); //åº”ä¸ºå³å°æ‹¬å·
 	//	}
 	//	else {
-	//		printlex(); //´òÓ¡)
+	//		printlex(); //æ‰“å°)
 	//		getsym();
 	//	}
 	//	sta(p);
 	//	if (symbol == "ELSETK") {
-	//		printlex(); //´òÓ¡else
+	//		printlex(); //æ‰“å°else
 	//		getsym();
 	//		sta(p);
 	//	}
-	//	printsyn("<Ìõ¼şÓï¾ä>");
+	//	printsyn("<æ¡ä»¶è¯­å¥>");
 	//}
 }
 
-//Ìõ¼ş*
+//æ¡ä»¶*
 void condition(string& jumlab1, bool isFor, string& jumlab2) {
 	if (!HandleError){
-		string l_name;
+		string l_name, op, r_name;
 		expr(l_name);
 		if (symbol == "LSS" || symbol == "LEQ"
 			|| symbol == "GRE" || symbol == "GEQ"
 			|| symbol == "NEQ" || symbol == "EQL") {
-			string op = symbol;
-			string r_name;
+			op = symbol;
 			printlex();
 			getsym();
 			expr(r_name);
@@ -333,7 +324,7 @@ void condition(string& jumlab1, bool isFor, string& jumlab2) {
 				emit(">", l_name, r_name, jumlab1);
 				if (isFor) emit("<=", l_name, r_name, jumlab2);
 			}
-			else if (op == "GTR") {
+			else if (op == "GRE") {
 				emit("<=", l_name, r_name, jumlab1);
 				if (isFor) emit(">", l_name, r_name, jumlab2);
 			}
@@ -346,7 +337,7 @@ void condition(string& jumlab1, bool isFor, string& jumlab2) {
 			jumlab1 = newLab();
 			emit("==", l_name, "0", jumlab1);
 		}
-		printsyn("<Ìõ¼ş>");
+		printsyn("<æ¡ä»¶>");
 	}
 	//else {
 	//	string l_type = "INTTK";
@@ -355,19 +346,19 @@ void condition(string& jumlab1, bool isFor, string& jumlab2) {
 	//	if (symbol == "LSS" || symbol == "LEQ"
 	//		|| symbol == "GRE" || symbol == "GEQ"
 	//		|| symbol == "NEQ" || symbol == "EQL") {
-	//		printlex(); //´òÓ¡<>=
+	//		printlex(); //æ‰“å°<>=
 	//		getsym();
 	//		r_type = expr(p);
 	//	}
-	//	/* ´íÎó´¦Àí */
+	//	/* é”™è¯¯å¤„ç† */
 	//	if (l_type != "INTTK" || r_type != "INTTK") {
 	//		syntax_error('f', 1);
 	//	}
-	//	printsyn("<Ìõ¼ş>");
+	//	printsyn("<æ¡ä»¶>");
 	//}
 }
 
-//Ñ­»·Óï¾ä*
+//å¾ªç¯è¯­å¥*
 void lpsta() {
 	if (!HandleError) {
 		if (symbol == "WHILETK") {
@@ -377,10 +368,10 @@ void lpsta() {
 			emit("Lab", top_lab, "", "");
 			printlex();
 			getsym();
-			printlex(); //´òÓ¡£¨
+			printlex(); //æ‰“å°ï¼ˆ
 			getsym();
 			condition(jum_lab, false, temp);
-			printlex(); //´òÓ¡£©
+			printlex(); //æ‰“å°ï¼‰
 			getsym();
 			sta();
 			emit("Jmp", top_lab, "", "");
@@ -394,12 +385,12 @@ void lpsta() {
 			printlex();
 			getsym();
 			sta();
-			printlex(); //´òÓ¡while
+			printlex(); //æ‰“å°while
 			getsym();
-			printlex();//´òÓ¡£¨
+			printlex();//æ‰“å°ï¼ˆ
 			getsym();
 			condition(jum_lab,false,temp);
-			printlex(); //´òÓ¡£©
+			printlex(); //æ‰“å°ï¼‰
 			getsym();
 			emit("Jmp", top_lab, "", "");
 			emit("Lab", jum_lab, "", "");
@@ -407,7 +398,7 @@ void lpsta() {
 		else if (symbol == "FORTK") {
 			printlex();
 			getsym();
-			printlex(); //´òÓ¡£¨
+			printlex(); //æ‰“å°ï¼ˆ
 
 			string con_entry, add_entry;
 			string lp_entry, lp_end;
@@ -420,194 +411,196 @@ void lpsta() {
 			string l_name, r_name;
 			getsym();
 			l_name = token;
-			printlex(); //´òÓ¡±êÊ¶·û
+			printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 			getsym();
-			printlex(); //´òÓ¡=
+			printlex(); //æ‰“å°=
 			getsym();
 			expr(r_name);
 			emit("=", l_name, r_name, "");
 			emit("Jmp", lp_entry, "", "");
 			emit("Lab", con_entry, "", "");
-			printlex(); //´òÓ¡·ÖºÅ
+			printlex(); //æ‰“å°åˆ†å·
 
 			//part2
 			getsym();
 			condition(lp_end,true,lp_entry);
-			printlex();//´òÓ¡·ÖºÅ
+			printlex();//æ‰“å°åˆ†å·
 
 			//part3
 			string ll_name, rr_name, op, num;
 			emit("Lab", add_entry, "", "");
 			getsym();
-			printlex(); //´òÓ¡±êÊ¶·û
+			printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 			ll_name = token;
 			getsym();
-			printlex(); //´òÓ¡=
+			printlex(); //æ‰“å°=
 			getsym();
 			rr_name = token;
-			printlex(); //´òÓ¡±êÊ¶·û
+			printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 			getsym();
-			printlex(); //´òÓ¡+-
+			printlex(); //æ‰“å°+-
 			op = token;
 			getsym();
 			steplen(num);
 			emit(op, rr_name, num, ll_name);
-			emit("Jml", con_entry, "", "");
+			emit("Jmp", con_entry, "", "");
 			emit("Lab", lp_entry, "", "");
-			printlex();//´òÓ¡£©
+			printlex();//æ‰“å°ï¼‰
 
 			//part4
 			getsym();
 			sta();
-			emit("Jml", add_entry, "", "");
-			emit("Lab", lp_entry, "", "");
+			emit("Jmp", add_entry, "", "");
+			emit("Lab", lp_end, "", "");
 		}
-		printsyn("<Ñ­»·Óï¾ä>");
+		printsyn("<å¾ªç¯è¯­å¥>");
 	}
 	//else {
 	//	if (symbol == "whiletk") {
-	//		printlex(); //´òÓ¡while
+	//		printlex(); //æ‰“å°while
 	//		getsym();
-	//		printlex(); //´òÓ¡£¨
+	//		printlex(); //æ‰“å°ï¼ˆ
 	//		getsym();
 	//		condition(p);
 	//		if (symbol != "rparent") {
-	//			syntax_error('l', 1); //Ó¦ÎªÓÒĞ¡À¨ºÅ
+	//			syntax_error('l', 1); //åº”ä¸ºå³å°æ‹¬å·
 	//		}
 	//		else {
-	//			printlex(); //´òÓ¡)
+	//			printlex(); //æ‰“å°)
 	//			getsym();
 	//		}
 	//		sta(p);
 	//	}
 	//	else if (symbol == "dotk") {
-	//		printlex(); //´òÓ¡do
+	//		printlex(); //æ‰“å°do
 	//		getsym();
 	//		sta(p);
-	//		/* ´íÎó´¦Àí */
+	//		/* é”™è¯¯å¤„ç† */
 	//		if (symbol != "whiletk") {
-	//			syntax_error('n', 1);  //È±ÉÙwhile
+	//			syntax_error('n', 1);  //ç¼ºå°‘while
 	//		}
 	//		else {
-	//			printlex(); //´òÓ¡while
+	//			printlex(); //æ‰“å°while
 	//			getsym();
 	//		}
 	//		if (symbol == "lparent") {
-	//			printlex();//´òÓ¡£¨
+	//			printlex();//æ‰“å°ï¼ˆ
 	//			getsym();
 	//			condition(p);
 	//			if (symbol != "rparent") {
-	//				syntax_error('l', 1); //Ó¦ÎªÓÒĞ¡À¨ºÅ
+	//				syntax_error('l', 1); //åº”ä¸ºå³å°æ‹¬å·
 	//			}
 	//			else {
-	//				printlex(); //´òÓ¡)
+	//				printlex(); //æ‰“å°)
 	//				getsym();
 	//			}
 	//		}
 	//	}
 	//	else if (symbol == "fortk") {
-	//		printlex(); //´òÓ¡for
+	//		printlex(); //æ‰“å°for
 	//		getsym();
-	//		printlex(); //´òÓ¡£¨
+	//		printlex(); //æ‰“å°ï¼ˆ
 	//		getsym();
-	//		/* ´íÎó´¦Àí */
+	//		/* é”™è¯¯å¤„ç† */
 	//		int index_l = p.search_vname(token);
 	//		int index_g = global.search_vname(token);
 	//		if (index_l == -1 && index_g == -1) {
-	//			syntax_error('c', 3);  //Ãû×ÖÎ´¶¨Òå
+	//			syntax_error('c', 3);  //åå­—æœªå®šä¹‰
 	//		}
 	//		if (index_l != -1) {
 	//			if (p.sym[index_l].type == "consttk") {
-	//				syntax_error('j', 1); //¸Ä±ä³£Á¿µÄÖµ
+	//				syntax_error('j', 1); //æ”¹å˜å¸¸é‡çš„å€¼
 	//			}
 	//		}
 	//		if (index_l == -1 && index_g != -1) {
 	//			if (global.sym[index_g].type == "consttk") {
-	//				syntax_error('j', 2); //¸Ä±ä³£Á¿µÄÖµ
+	//				syntax_error('j', 2); //æ”¹å˜å¸¸é‡çš„å€¼
 	//			}
 	//		}
-	//		printlex(); //´òÓ¡±êÊ¶·û
+	//		printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 	//		getsym();
-	//		printlex(); //´òÓ¡=
+	//		printlex(); //æ‰“å°=
 	//		getsym();
 	//		expr(p);
-	//		/* ´íÎó´¦Àí */
+	//		/* é”™è¯¯å¤„ç† */
 	//		if (symbol != "semicn") {
-	//			syntax_error('k', 0); //Ó¦Îª·ÖºÅ
+	//			syntax_error('k', 0); //åº”ä¸ºåˆ†å·
 	//		}
 	//		else {
-	//			printlex(); //´òÓ¡·ÖºÅ
+	//			printlex(); //æ‰“å°åˆ†å·
 	//			getsym();
 	//		}
 	//		condition(p);
-	//		/* ´íÎó´¦Àí */
+	//		/* é”™è¯¯å¤„ç† */
 	//		if (symbol != "semicn") {
-	//			syntax_error('k', 0); //Ó¦Îª·ÖºÅ
+	//			syntax_error('k', 0); //åº”ä¸ºåˆ†å·
 	//		}
 	//		else {
-	//			printlex(); //´òÓ¡·ÖºÅ
+	//			printlex(); //æ‰“å°åˆ†å·
 	//			getsym();
 	//		}
-	//		/* ´íÎó´¦Àí */
+	//		/* é”™è¯¯å¤„ç† */
 	//		index_l = p.search_vname(token);
 	//		index_g = global.search_vname(token);
 	//		if (index_l == -1 && index_g == -1) {
-	//			syntax_error('c', 3);  //Ãû×ÖÎ´¶¨Òå
+	//			syntax_error('c', 3);  //åå­—æœªå®šä¹‰
 	//		}
 	//		if (index_l != -1) {
 	//			if (p.sym[index_l].type == "consttk") {
-	//				syntax_error('j', 1); //¸Ä±ä³£Á¿µÄÖµ
+	//				syntax_error('j', 1); //æ”¹å˜å¸¸é‡çš„å€¼
 	//			}
 	//		}
 	//		if (index_l == -1 && index_g != -1) {
 	//			if (global.sym[index_g].type == "consttk") {
-	//				syntax_error('j', 2); //¸Ä±ä³£Á¿µÄÖµ
+	//				syntax_error('j', 2); //æ”¹å˜å¸¸é‡çš„å€¼
 	//			}
 	//		}
-	//		printlex(); //´òÓ¡±êÊ¶·û
+	//		printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 	//		getsym();
-	//		printlex(); //´òÓ¡=
+	//		printlex(); //æ‰“å°=
 	//		getsym();
-	//		printlex(); //´òÓ¡±êÊ¶·û
+	//		printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 	//		getsym();
-	//		printlex(); //´òÓ¡+-
+	//		printlex(); //æ‰“å°+-
 	//		getsym();
 	//		steplen(p);
-	//		/* ´íÎó´¦Àí */
+	//		/* é”™è¯¯å¤„ç† */
 	//		if (symbol != "rparent") {
-	//			syntax_error('l', 1); //Ó¦ÎªÓÒĞ¡À¨ºÅ
+	//			syntax_error('l', 1); //åº”ä¸ºå³å°æ‹¬å·
 	//		}
 	//		else {
-	//			printlex(); //´òÓ¡)
+	//			printlex(); //æ‰“å°)
 	//			getsym();
 	//		}
 	//		sta(p);
 	//	}
-	//	printsyn("<Ñ­»·Óï¾ä>");
+	//	printsyn("<å¾ªç¯è¯­å¥>");
 	//}
 }
 
-//²½³¤*
+//æ­¥é•¿*
 void steplen(string& num) {
 	if (!HandleError) {
 		num = "";
 		if (symbol != "INTCON") error();
 		usINT(num);
-		printsyn("<²½³¤>");
+		printsyn("<æ­¥é•¿>");
 	}
 	/*else {
 		num = "";
 		if (symbol != "INTCON") error();
 		usINT(num);
-		printsyn("<²½³¤>");
+		printsyn("<æ­¥é•¿>");
 	}*/
 }
 
-//Óï¾äÁĞ*
+//è¯­å¥åˆ—*
 void stas() {
 	if (!HandleError) {
+		int curRegNum = getRegNum();
 		while (symbol != "RBRACE") sta();
-		printsyn("<Óï¾äÁĞ>");
+		resetRegNum(curRegNum);
+		printsyn("<è¯­å¥åˆ—>");
 	}
 	/*else {
 		int hasreturn = 0;
@@ -615,45 +608,45 @@ void stas() {
 			int temp = sta(p);
 			if (temp == 1)hasreturn = 1;
 		}
-		printsyn("<Óï¾äÁĞ>");
+		printsyn("<è¯­å¥åˆ—>");
 	}*/
 }
 
-//¶ÁÓï¾ä*
+//è¯»è¯­å¥*
 void rdsta() {
 	if (!HandleError) {
 		if (symbol != "SCANFTK") error();
 		string name;
-		printlex(); //´òÓ¡scanf
+		printlex(); //æ‰“å°scanf
 		getsym();
-		printlex(); //´òÓ¡£¨
+		printlex(); //æ‰“å°ï¼ˆ
 		getsym();
 		name = token;
-		printlex(); //´òÓ¡±êÊ¶·û
+		printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 		emit("Scan", name, "", "");
 		while (1) {
 			getsym();
 			if (symbol == "RPARENT")break;
-			printlex(); //´òÓ¡¶ººÅ
+			printlex(); //æ‰“å°é€—å·
 			getsym();
 			emit("Scan", name, "", "");
-			printlex(); //´òÓ¡±êÊ¶·û
+			printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 		}
-		printlex(); //´òÓ¡£©
-		printsyn("<¶ÁÓï¾ä>");
+		printlex(); //æ‰“å°ï¼‰
+		printsyn("<è¯»è¯­å¥>");
 		getsym();
 	}
 	//else {
 	//	if (symbol != "SCANFTK") error();
-	//	printlex(); //´òÓ¡scanf
+	//	printlex(); //æ‰“å°scanf
 	//	getsym();
-	//	printlex(); //´òÓ¡£¨
+	//	printlex(); //æ‰“å°ï¼ˆ
 	//	getsym();
-	//	/* ´íÎó´¦Àí */
+	//	/* é”™è¯¯å¤„ç† */
 	//	if (p.search_vname(token) == -1 && global.search_vname(token) == -1) {
 	//		syntax_error('c', 4);
 	//	}
-	//	printlex(); //´òÓ¡±êÊ¶·û
+	//	printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 	//	while (1) {
 	//		getsym();
 	//		if (symbol == "RPARENT")break;
@@ -661,80 +654,82 @@ void rdsta() {
 	//			syntax_error('l', 1);
 	//			break;
 	//		}
-	//		printlex(); //´òÓ¡¶ººÅ
+	//		printlex(); //æ‰“å°é€—å·
 	//		getsym();
-	//		/* ´íÎó´¦Àí */
+	//		/* é”™è¯¯å¤„ç† */
 	//		if (p.search_vname(token) == -1 && global.search_vname(token) == -1) {
 	//			syntax_error('c', 4);
 	//		}
-	//		printlex(); //´òÓ¡±êÊ¶·û
+	//		printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 	//	}
 	//	if (symbol != "RPARENT") {
-	//		syntax_error('l', 1); //Ó¦ÎªÓÒĞ¡À¨ºÅ
+	//		syntax_error('l', 1); //åº”ä¸ºå³å°æ‹¬å·
 	//	}
 	//	else {
-	//		printlex(); //´òÓ¡)
+	//		printlex(); //æ‰“å°)
 	//		getsym();
 	//	}
-	//	printsyn("<¶ÁÓï¾ä>");
+	//	printsyn("<è¯»è¯­å¥>");
 	//}
 }
 
-//Ğ´Óï¾ä*
+//å†™è¯­å¥*
 void wtsta() {
 	if (!HandleError) {
 		string print_str="", reg_name, ret_type;
 		if (symbol != "PRINTFTK") error();
-		printlex(); //´òÓ¡printf
+		printlex(); //æ‰“å°printf
 		getsym();
-		printlex(); //´òÓ¡£¨
+		printlex(); //æ‰“å°ï¼ˆ
 		getsym();
 		if (symbol == "STRCON") {
 			print_str = token;
 			str();
 			if (symbol == "COMMA") {
-				printlex(); //´òÓ¡¶ººÅ
+				printlex(); //æ‰“å°é€—å·
 				getsym();
 				ret_type = expr(reg_name);
 				emit("Print", print_str, ret_type, reg_name);
 			}
-			emit("Print", print_str, "", "");
+			else {
+				emit("Print", print_str, "", "");
+			}
 		}
 		else {
 			ret_type = expr(reg_name);
 			emit("Print", print_str, ret_type, reg_name);
 		}
-		printlex(); // ´òÓ¡£©
-		printsyn("<Ğ´Óï¾ä>");
+		printlex(); // æ‰“å°ï¼‰
+		printsyn("<å†™è¯­å¥>");
 		getsym();
 	}
 	//else {
 	//	if (symbol != "PRINTFTK") error();
-	//	printlex(); //´òÓ¡printf
+	//	printlex(); //æ‰“å°printf
 	//	getsym();
-	//	printlex(); //´òÓ¡£¨
+	//	printlex(); //æ‰“å°ï¼ˆ
 	//	getsym();
 	//	if (symbol == "STRCON") {
 	//		str();
 	//		if (symbol == "COMMA") {
-	//			printlex(); //´òÓ¡¶ººÅ
+	//			printlex(); //æ‰“å°é€—å·
 	//			getsym();
 	//			expr(p);
 	//		}
 	//	}
 	//	else expr(p);
 	//	if (symbol != "RPARENT") {
-	//		syntax_error('l', 1); //Ó¦ÎªÓÒĞ¡À¨ºÅ
+	//		syntax_error('l', 1); //åº”ä¸ºå³å°æ‹¬å·
 	//	}
 	//	else {
-	//		printlex(); //´òÓ¡)
+	//		printlex(); //æ‰“å°)
 	//		getsym();
 	//	}
-	//	printsyn("<Ğ´Óï¾ä>");
+	//	printsyn("<å†™è¯­å¥>");
 	//}
 }
 
-//·µ»ØÓï¾ä*
+//è¿”å›è¯­å¥*
 void rsta() {
 	if (!HandleError) {
 		if (symbol != "RETURNTK") error();
@@ -742,49 +737,49 @@ void rsta() {
 		getsym();
 		if (symbol != "SEMICN") {
 			string reg_name;
-			printlex(); //´òÓ¡£¨
+			printlex(); //æ‰“å°ï¼ˆ
 			getsym();
 			expr(reg_name);
 			emit("Ret", reg_name, "", "$End_" + syt[level].sym[0].name);
-			printlex(); //´òÓ¡£©
+			printlex(); //æ‰“å°ï¼‰
 			getsym();
 		}
 		else {
 			emit("Ret", "", "", "$End_" + syt[level].sym[0].name);
 		}
-		printsyn("<·µ»ØÓï¾ä>");
+		printsyn("<è¿”å›è¯­å¥>");
 	}
 	//else {
 	//	hasreturn = true;
 	//	string ret_type;
 	//	if (symbol != "RETURNTK") error();
-	//	printlex(); //´òÓ¡return
+	//	printlex(); //æ‰“å°return
 	//	getsym();
 	//	if (symbol == "SEMICN") {
 	//		if (p.sym[0].ret_type != "VOIDTK") {
-	//			syntax_error('h', 1); //ÓĞ·µ»ØÖµº¯Êı´æÔÚ²»Æ¥ÅäµÄreturnÓï¾ä
+	//			syntax_error('h', 1); //æœ‰è¿”å›å€¼å‡½æ•°å­˜åœ¨ä¸åŒ¹é…çš„returnè¯­å¥
 	//		}
 	//	}
 	//	if (symbol == "LPARENT") {
-	//		/* ´íÎó´¦Àí */
+	//		/* é”™è¯¯å¤„ç† */
 	//		if (p.sym[0].ret_type == "VOIDTK") {
-	//			syntax_error('g', 1); //ÎŞ·µ»ØÖµº¯Êı´æÔÚ²»Æ¥ÅäµÄreturnÓï¾ä
+	//			syntax_error('g', 1); //æ— è¿”å›å€¼å‡½æ•°å­˜åœ¨ä¸åŒ¹é…çš„returnè¯­å¥
 	//		}
-	//		printlex(); //´òÓ¡£¨
+	//		printlex(); //æ‰“å°ï¼ˆ
 	//		getsym();
 	//		ret_type = expr(p);
-	//		/* ´íÎó´¦Àí */
+	//		/* é”™è¯¯å¤„ç† */
 	//		if (ret_type != p.sym[0].ret_type && p.sym[0].ret_type != "VOIDTK") {
-	//			syntax_error('h', 1); //ÓĞ·µ»ØÖµº¯Êı´æÔÚ²»Æ¥ÅäµÄreturnÓï¾ä
+	//			syntax_error('h', 1); //æœ‰è¿”å›å€¼å‡½æ•°å­˜åœ¨ä¸åŒ¹é…çš„returnè¯­å¥
 	//		}
 	//		if (symbol != "RPARENT") {
-	//			syntax_error('l', 1); //Ó¦ÎªÓÒĞ¡À¨ºÅ
+	//			syntax_error('l', 1); //åº”ä¸ºå³å°æ‹¬å·
 	//		}
 	//		else {
-	//			printlex(); //´òÓ¡)
+	//			printlex(); //æ‰“å°)
 	//			getsym();
 	//		}
 	//	}
-	//	printsyn("<·µ»ØÓï¾ä>");
+	//	printsyn("<è¿”å›è¯­å¥>");
 	//}
 }

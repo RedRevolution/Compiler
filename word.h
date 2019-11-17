@@ -1,8 +1,8 @@
-#pragma once
-#define IDENFR 0	//±êÊ¶·û
-#define INTCON 1	//ÕûĞÎ³£Á¿   
-#define CHARCON 2	//×Ö·û³£Á¿
-#define STRCON 3	//×Ö·û´®
+ï»¿#pragma once
+#define IDENFR 0	//æ ‡è¯†ç¬¦
+#define INTCON 1	//æ•´å½¢å¸¸é‡   
+#define CHARCON 2	//å­—ç¬¦å¸¸é‡
+#define STRCON 3	//å­—ç¬¦ä¸²
 #define CONSTTK 4	//const
 #define INTTK 5		//int
 #define CHARTK 6	//char

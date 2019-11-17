@@ -1,11 +1,11 @@
-#pragma once
+ï»¿#pragma once
 #include "lexical_analysis.h"
 #include "generateMcode.h"
 using namespace std;
 
 typedef struct prt {
 	int length;
-	string name[N / 10]; //×î¶à30¸ö²ÎÊı 
+	string name[N / 10]; //æœ€å¤š30ä¸ªå‚æ•° 
 	string ret_type[N / 10]; //INT CHAR
 	prt() : length(0) {}
 	bool add(string pr_name, string ret_type) {
@@ -89,7 +89,7 @@ void vd();
 void vs();
 
 //expression
-//·µ»ØÖµÀàĞÍ:INTTK|CHARTK,regNameÊÇ±äÁ¿Ãû,$txºÍnum(³£Êı»ò×Ö·ûµÄascill)
+//è¿”å›å€¼ç±»å‹:INTTK|CHARTK,regNameæ˜¯å˜é‡å,$txå’Œnum(å¸¸æ•°æˆ–å­—ç¬¦çš„ascill)
 string expr(string& regName);
 string term(string& regName);
 string factor(string& regName);

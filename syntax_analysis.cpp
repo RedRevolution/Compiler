@@ -131,13 +131,13 @@ void program() {
 
 int main() {
 	in = fopen("testfile.txt", "rt+");
-	out = fopen("error.txt", "w");
+	//out = fopen("error.txt", "w");
 	HandleError = false;
 	getsym();
 	program();
 	//printError();
 	fclose(in);
-	fclose(out);
+	//fclose(out);
 	printMidCode();
 	return 0;
 }

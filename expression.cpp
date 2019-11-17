@@ -1,6 +1,6 @@
-#include "syntax_analysis.h"
+ï»¿#include "syntax_analysis.h"
 
-//±í´ïÊ½*
+//è¡¨è¾¾å¼*
 string expr(string& regName) {
 	if (!HandleError) {
 		bool charflag = true;
@@ -22,7 +22,7 @@ string expr(string& regName) {
 			if (symbol != "PLUS" && symbol != "MINU")break;
 			charflag = false;
 			op = token;
-			printlex(); //´òÓ¡Õı¸ººÅ
+			printlex(); //æ‰“å°æ­£è´Ÿå·
 			getsym();
 			term(reg_2);
 			reg_3 = newReg();
@@ -30,7 +30,7 @@ string expr(string& regName) {
 			reg_1 = reg_3;
 		}
 		regName = reg_1;
-		printsyn("<±í´ïÊ½>");
+		printsyn("<è¡¨è¾¾å¼>");
 		if (charflag)return "CHARTK";
 		else return "INTTK";
 	}
@@ -39,7 +39,7 @@ string expr(string& regName) {
 	//	int flag = 0;
 	//	int count = 0;
 	//	if (symbol == "PLUS" || symbol == "MINU") {
-	//		printlex(); //´òÓ¡Õı¸ººÅ
+	//		printlex(); //æ‰“å°æ­£è´Ÿå·
 	//		flag = 1;
 	//		getsym();
 	//	}
@@ -47,16 +47,16 @@ string expr(string& regName) {
 	//		ret_v = term(p);
 	//		count++;
 	//		if (symbol != "PLUS" && symbol != "MINU") break;
-	//		printlex(); //´òÓ¡Õı¸ººÅ
+	//		printlex(); //æ‰“å°æ­£è´Ÿå·
 	//		getsym();
 	//	}
-	//	printsyn("<±í´ïÊ½>");
+	//	printsyn("<è¡¨è¾¾å¼>");
 	//	if (count > 1 || flag)ret_v = "INTTK";
 	//	return ret_v;
 	//}
 }
 
-//Ïî*
+//é¡¹*
 string term(string& regName) {
 	if (!HandleError) {
 		string ret_type;
@@ -73,8 +73,8 @@ string term(string& regName) {
 			emit(op, reg_1, reg_2, reg_3);
 			reg_1 = reg_3;
 		}
-		regName = reg_3;
-		printsyn("<Ïî>");
+		regName = reg_1;
+		printsyn("<é¡¹>");
 		if (charflag)return "CHARTK";
 		else return "INTTK";
 	}
@@ -84,59 +84,59 @@ string term(string& regName) {
 	//	ret_v = factor(p);
 	//	count++;
 	//	while (symbol == "MULT" || symbol == "DIV") {
-	//		printlex(); //´òÓ¡³Ë³ıºÅ
+	//		printlex(); //æ‰“å°ä¹˜é™¤å·
 	//		getsym();
 	//		factor(p);
 	//		count++;
 	//	}
-	//	printsyn("<Ïî>");
+	//	printsyn("<é¡¹>");
 	//	if (count > 1)ret_v = "INTTK";
 	//	return ret_v;
 	//}
 }
 
-//Òò×Ó*
+//å› å­*
 string factor(string& regName) {
 	if (!HandleError) {
 		string ret_type;
 		if (symbol == "IDENFR") {
 			string name = token;
-			//ÓĞ·µ»ØÖµµ÷ÓÃº¯Êı
+			//æœ‰è¿”å›å€¼è°ƒç”¨å‡½æ•°
 			if (preload(1) == "LPARENT") {
 				ret_type = syt[0].sym[syt[0].search_name(name)].ret_type;
 				if (ret_type == "CHARTK"||ret_type == "INTTK") callrfun();
 				regName = newReg();
 				emit("Fetch", "", "", regName);
-				printsyn("<Òò×Ó>");
+				printsyn("<å› å­>");
 			}
-			else if (preload(1) == "LBRACK") { //£¼±êÊ¶·û£¾¡®[¡¯£¼±í´ïÊ½£¾¡®]¡¯
-				if (syt[level].search_name[name] != -1) ret_type = syt[level].sym[syt[level].search_name(name)].ret_type;
+			else if (preload(1) == "LBRACK") { //ï¼œæ ‡è¯†ç¬¦ï¼â€˜[â€™ï¼œè¡¨è¾¾å¼ï¼â€˜]â€™
+				if (syt[level].search_name(name) != -1) ret_type = syt[level].sym[syt[level].search_name(name)].ret_type;
 				else ret_type = syt[0].sym[syt[0].search_name(name)].ret_type;
-				printlex(); //´òÓ¡±êÊ¶·û
+				printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 				getsym();
-				printlex(); //´òÓ¡[
+				printlex(); //æ‰“å°[
 				getsym();
 				string reg_index;
 				expr(reg_index);
 				regName = newReg();
 				emit("[]", name, reg_index, regName);
-				printlex(); //´òÓ¡]
+				printlex(); //æ‰“å°]
 				getsym();
-				printsyn("<Òò×Ó>");
+				printsyn("<å› å­>");
 			}
-			else {   //±äÁ¿Ãû
-				if (syt[level].search_name[name] != -1) ret_type = syt[level].sym[syt[level].search_name(name)].ret_type;
+			else {   //å˜é‡å
+				if (syt[level].search_name(name) != -1) ret_type = syt[level].sym[syt[level].search_name(name)].ret_type;
 				else ret_type = syt[0].sym[syt[0].search_name(name)].ret_type;
-				printlex(); //´òÓ¡±êÊ¶·û
+				printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 				regName = name;
 				getsym();
 			}
 		}
 		else if (symbol == "LPARENT") {
-			printlex(); //´òÓ¡£¨
+			printlex(); //æ‰“å°ï¼ˆ
 			getsym();
 			ret_type = expr(regName);
-			printlex(); //´òÓ¡£©
+			printlex(); //æ‰“å°ï¼‰
 			getsym();
 		}
 		else if (symbol == "PLUS" || symbol == "MINU" || symbol == "INTCON") {
@@ -149,16 +149,16 @@ string factor(string& regName) {
 			getsym();
 			ret_type = "CHARTK";
 		}
-		printsyn("<Òò×Ó>");
+		printsyn("<å› å­>");
 		return ret_type;
 	}
 	//else {
 	//	string ret_v = "INTTK";
 	//	if (symbol == "IDENFR") {
-	//		//ÓĞ·µ»ØÖµµ÷ÓÃº¯Êı
+	//		//æœ‰è¿”å›å€¼è°ƒç”¨å‡½æ•°
 	//		if (preload(1) == "LPARENT") {
 	//			int index = global.search_rfun(token);
-	//			/* ´íÎó´¦Àí */
+	//			/* é”™è¯¯å¤„ç† */
 	//			if (index == -1) {
 	//				syntax_error('c', 3);
 	//				while (symbol != "RPARENT")getsym();
@@ -167,48 +167,48 @@ string factor(string& regName) {
 	//			}
 	//			ret_v = global.sym[index].ret_type;
 	//			callrfun(p);
-	//			printsyn("<Òò×Ó>");
+	//			printsyn("<å› å­>");
 	//			return ret_v;
 	//		}
-	//		//ÕâÀï³öÏÖµÄ±êÊ¶·û¿ÉÄÜÊÇ±äÁ¿³£Á¿»òÊı×é
+	//		//è¿™é‡Œå‡ºç°çš„æ ‡è¯†ç¬¦å¯èƒ½æ˜¯å˜é‡å¸¸é‡æˆ–æ•°ç»„
 	//		int index_g = global.search_vname(token);
 	//		int index_l = p.search_vname(token);
-	//		/* ´íÎó´¦Àí */
+	//		/* é”™è¯¯å¤„ç† */
 	//		if (index_g == -1 && index_l == -1) {
 	//			syntax_error('c', 2);
 	//		}
 	//		if (index_g != -1) ret_v = global.sym[index_g].ret_type;
 	//		if (index_l != -1) ret_v = p.sym[index_l].ret_type;
-	//		printlex(); //´òÓ¡±êÊ¶·û
+	//		printlex(); //æ‰“å°æ ‡è¯†ç¬¦
 	//		getsym();
-	//		//±êÊ¶·û[±í´ïÊ½]
+	//		//æ ‡è¯†ç¬¦[è¡¨è¾¾å¼]
 	//		if (symbol == "LBRACK") {
-	//			printlex(); //´òÓ¡[
+	//			printlex(); //æ‰“å°[
 	//			getsym();
-	//			/* ´íÎó´¦Àí */
+	//			/* é”™è¯¯å¤„ç† */
 	//			if (expr(p) != "INTTK") {
-	//				syntax_error('i', 1); //Êı×éÏÂ±êÖ»ÄÜÊÇÕûĞÎ
+	//				syntax_error('i', 1); //æ•°ç»„ä¸‹æ ‡åªèƒ½æ˜¯æ•´å½¢
 	//			}
-	//			/* ´íÎó´¦Àí */
+	//			/* é”™è¯¯å¤„ç† */
 	//			if (symbol != "RBRACK") {
-	//				syntax_error('m', 1); //Ó¦ÎªÓÒÖĞÀ¨ºÅ
+	//				syntax_error('m', 1); //åº”ä¸ºå³ä¸­æ‹¬å·
 	//			}
 	//			else {
-	//				printlex(); //´òÓ¡]
+	//				printlex(); //æ‰“å°]
 	//				getsym();
 	//			}
 	//		}
 	//	}
 	//	else if (symbol == "LPARENT") {
-	//		printlex(); //´òÓ¡£¨
+	//		printlex(); //æ‰“å°ï¼ˆ
 	//		getsym();
 	//		expr(p);
-	//		/* ´íÎó´¦Àí */
+	//		/* é”™è¯¯å¤„ç† */
 	//		if (symbol != "RPARENT") {
-	//			syntax_error('l', 1); //Ó¦ÎªÓÒĞ¡À¨ºÅ
+	//			syntax_error('l', 1); //åº”ä¸ºå³å°æ‹¬å·
 	//		}
 	//		else {
-	//			printlex(); //´òÓ¡)
+	//			printlex(); //æ‰“å°)
 	//			getsym();
 	//		}
 	//		ret_v = "INTTK";
@@ -218,11 +218,11 @@ string factor(string& regName) {
 	//		ret_v = "INTTK";
 	//	}
 	//	else if (symbol == "CHARCON") {
-	//		printlex(); //´òÓ¡char
+	//		printlex(); //æ‰“å°char
 	//		getsym();
 	//		ret_v = "CHARTK";
 	//	}
-	//	printsyn("<Òò×Ó>");
+	//	printsyn("<å› å­>");
 	//	return ret_v;
 	//}
 }
