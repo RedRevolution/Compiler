@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "lexical_analysis.h"
 #include "generateMcode.h"
+#include "generateObjcode.h"
 using namespace std;
 
 typedef struct prt {

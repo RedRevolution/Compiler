@@ -15,7 +15,7 @@ string expr(string& regName) {
 		if (term(reg_1) == "INTTK") charflag = false;
 		if (negFlag) {
 			reg_3 = newReg();
-			emit("-", "$zero", reg_1, reg_3);
+			emit("-", "0", reg_1, reg_3);
 			reg_1 = reg_3;
 		}
 		while (1) {
@@ -31,7 +31,7 @@ string expr(string& regName) {
 		}
 		regName = reg_1;
 		printsyn("<表达式>");
-		if (charflag)return "CHARTK";
+		if (charflag) return "CHARTK";
 		else return "INTTK";
 	}
 	//else {
@@ -135,7 +135,8 @@ string factor(string& regName) {
 		else if (symbol == "LPARENT") {
 			printlex(); //打印（
 			getsym();
-			ret_type = expr(regName);
+			ret_type = "INTTK";
+			expr(regName);
 			printlex(); //打印）
 			getsym();
 		}

@@ -11,7 +11,7 @@ typedef struct mcode{
 
 extern int regNum,labNum;
 extern McodeUnit midCode[1000];
-extern int midCodeNum = 0;
+extern int midCodeNum;
 
 
 void emit(string opno, string a, string b, string c);

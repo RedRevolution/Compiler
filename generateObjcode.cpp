@@ -15,7 +15,7 @@ void init() {
 	for (int i = 0; i < midCodeNum; i++) {
 		if (midCode[i].op == "Print" && midCode[i].arg1 != "") {
 			cout << "string_" << stringIndex << ": .asciiz " << "\"" << midCode[i].arg1 << "\"" << endl;
-			midCode[i].arg1 = "string_" + to_string(stringIndex);
+			midCode[i].arg1 = "string_" + to_string(stringIndex++);
 		}
 	}
 
@@ -33,13 +33,13 @@ void init() {
 		}
 		else if (midCode[i].op == "Var") {
 			global.add_var(midCode[i].arg2, midCode[i].arg1);
-			printmips("sw", "$zero", to_string(globalcnt * 4) + "($gp)", ""); //初始化
+			//printmips("sw", "$zero", to_string(globalcnt * 4) + "($gp)", ""); //初始化
 			global2bias[midCode[i].arg2] = globalcnt * 4;
 			globalcnt++;
 		}
 		else if (midCode[i].op == "Arr") {
 			global.add_arr(midCode[i].arg2, midCode[i].arg1, midCode[i].result);
-			printmips("sw", "$zero", to_string(globalcnt * 4) + "($gp)", ""); //初始化
+			//printmips("sw", "$zero", to_string(globalcnt * 4) + "($gp)", ""); //初始化
 			global2bias[midCode[i].arg2] = globalcnt * 4;
 			globalcnt += stoi(midCode[i].result);
 		}
@@ -53,6 +53,7 @@ void init() {
 	for (int i = 0; i < midCodeNum; i++) {
 		if (midCode[i].op == "Func") {
 			func2funcNo[midCode[i].arg2] = curfun;
+			i++;
 			while (midCode[i].op == "Para") {
 				func_syt[curfun].add_para(midCode[i].arg2, midCode[i].arg1);
 				i++;
@@ -73,6 +74,7 @@ void init() {
 				Max(maxRegNum, midCode[i].arg1, midCode[i].arg2, midCode[i].result);
 				i++;
 			}
+			func_syt[curfun].setMaxRegNum(maxRegNum);
 			func_syt[curfun].init();
 			curfun++;
 		}
@@ -127,9 +129,9 @@ void Con_local() {
 	string retType = midCode[Index].arg1;
 	string value = midCode[Index].result;
 
-	if (func_syt[curfun].getVarReg!="") {  //局部常量保存在s0-s7中
-		if(retType == "INTTK") printmips("li", func_syt[curfun].getVarReg, value, "");
-		else printmips("li", func_syt[curfun].getVarReg, "\'" + value + "\'", "");
+	if (func_syt[curfun].getVarReg(name)!="") {  //局部常量保存在s0-s7中
+		if(retType == "INTTK") printmips("li", func_syt[curfun].getVarReg(name), value, "");
+		else printmips("li", func_syt[curfun].getVarReg(name), "\'" + value + "\'", "");
 	}   
 	else {  //局部常量保存在运行栈里
 		if (retType == "INTTK") {
@@ -162,11 +164,12 @@ string preloadvar(string varname,string regname) {  //若没有寄存器对应�
 }
 
 string loadvar(string varname,int& type) {
-	if (func_syt[curfun].getVarReg(varname) != "") {  //局部变量分配有寄存器
+	if (varname == "$zero" || func_syt[curfun].getVarReg(varname) != "") {  //局部变量分配有寄存器
 		type = 1;
-		return func_syt[curfun].getVarReg(varname);
+		if (varname == "$zero") return varname;
+		else return func_syt[curfun].getVarReg(varname);
 	}
-	else if (func_syt[curfun].getVarBias(varname) != "") { //局部变量未分配寄存器
+	else if (func_syt[curfun].getVarBias(varname) != "") { //局部变量未分配寄存器,参数
 		type = 2;
 		return func_syt[curfun].getVarBias(varname);
 	}
@@ -174,7 +177,7 @@ string loadvar(string varname,int& type) {
 	iter = global2bias.find(varname);
 	if (iter != global2bias.end()) {
 		type = 3;
-		return to_string(-1 * iter->second);
+		return to_string(iter->second);
 	}
 	type = 0;
 	return "";
@@ -188,12 +191,17 @@ void swap(string& a, string& b) {
 }
 
 void Calculate() {
-	string op = midCode[Index].op;
+ 	string op = midCode[Index].op;
 	string arg1 = midCode[Index].arg1;
 	string arg2 = midCode[Index].arg2;
 	string result = midCode[Index].result;
 	int type;
 	string value = loadvar(result, type);
+
+	if (arg1 == "varchar") {
+		int i;
+		i = 0;
+	}
 
 	if (op == "+") {
 		if (isNum(arg1) && isNum(arg2)) {
@@ -354,8 +362,8 @@ void Branch() {
 
 void Fetch() {
 	int type;
-	string arg2 = midCode[Index].arg2;
-	string value = loadvar(arg2, type);
+	string result = midCode[Index].result;
+	string value = loadvar(result, type);
 	
 	if (type == 1) {
 		printmips("move", value, "$v0", "");
@@ -370,9 +378,9 @@ void Fetch() {
 
 //a = b[i]
 void Arr_Brack() {
-	string varname = midCode[Index].arg1;
-	string arrname = midCode[Index].arg2;
-	string arrindex = midCode[Index].result;
+	string arrname = midCode[Index].arg1;
+	string arrindex = midCode[Index].arg2;
+	string varname = midCode[Index].result;
 	int type_bias, type_index;
 	string arr_bias = loadvar(arrname, type_bias);
 	string index = preloadvar(arrindex, "$v0");
@@ -392,12 +400,11 @@ void Arr_Brack() {
 	}
 	else if (type_bias == 3) {  //全局数组变量
 		if (isNum(index)) {  //i是数字
-			int temp = stoi(arr_bias) - stoi(index) * 4;
+			int temp = stoi(arr_bias) + stoi(index) * 4;
 			printmips("lw", "$v0", to_string(temp) + "($gp)", "");
 		}
 		else {  //i是寄存器
 			printmips("sll", "$v0", index, "2");
-			printmips("sub", "$v0", "$zero", "$v0");
 			printmips("add", "$v0", "$v0", arr_bias);
 			printmips("add", "$v0", "$gp", "$v0");
 			printmips("lw", "$v0", "($v0)", "");
@@ -447,12 +454,11 @@ void Arr_Brack_Assi() {
 	}
 	else if (type_bias == 3) {  //全局数组变量
 		if (isNum(index)) {  //i是数字
-			int temp = stoi(arr_bias) - stoi(index) * 4;
+			int temp = stoi(arr_bias) + stoi(index) * 4;
 			printmips("sw", var2reg, to_string(temp) + "($gp)", "");
 		}
 		else {  //i是寄存器
 			printmips("sll", "$v0", index, "2");
-			printmips("sub", "$v0", "$zero", "$v0");
 			printmips("add", "$v0", "$v0", arr_bias);
 			printmips("add", "$v0", "$gp", "$v0");
 			printmips("sw", var2reg, "($v0)", "");
@@ -469,7 +475,6 @@ void Func_Def() {
 	if (iter != func2funcNo.end()) {
 		curfun = iter->second;
 		if(funcname == "main"){
-			printmips("move", "$fp", "$sp", "");
 			printmips("sub", "$sp", "$sp", to_string(func_syt[curfun].blocksize * 4));
 		}
 	}
@@ -477,7 +482,7 @@ void Func_Def() {
 
 void End_Func() {
 	cout << midCode[Index].result << ":" << endl;
-	printmips("jr", "$ra", "", "");
+	if(midCode[Index].result != "$End_main")printmips("jr", "$ra", "", "");
 }
 
 void Call_Func() {
@@ -513,8 +518,8 @@ void saveReg() {
 	for (int i = 0; i < func_syt[curfun].tregNo; i++) {
 		printmips("sw", "$t" + to_string(i), to_string(-4 * (func_syt[curfun].index + func_syt[curfun].sregNo + i)) + "($fp)", "");
 	}
-	printmips("sw", "$fp", to_string(-4 * (func_syt[curfun].blocksize - 2)) + "($fp)", "");
-	printmips("sw", "$ra", to_string(-4 * (func_syt[curfun].blocksize - 1)) + "($fp)", "");
+	//printmips("sw", "$fp", to_string(-4 * (func_syt[curfun].blocksize - 2)) + "($fp)", "");
+	//printmips("sw", "$ra", to_string(-4 * (func_syt[curfun].blocksize - 1)) + "($fp)", "");
 }
 
 void restoreReg() {
@@ -524,8 +529,8 @@ void restoreReg() {
 	for (int i = 0; i < func_syt[curfun].tregNo; i++) {
 		printmips("lw", "$t" + to_string(i), to_string(-4 * (func_syt[curfun].index + func_syt[curfun].sregNo + i)) + "($fp)", "");
 	}
-	printmips("lw", "$fp", to_string(-4 * (func_syt[curfun].blocksize - 2)) + "($fp)", "");
-	printmips("lw", "$ra", to_string(-4 * (func_syt[curfun].blocksize - 1)) + "($fp)", "");
+	//printmips("lw", "$fp", to_string(-4 * (func_syt[curfun].blocksize - 2)) + "($fp)", "");
+	//printmips("lw", "$ra", to_string(-4 * (func_syt[curfun].blocksize - 1)) + "($fp)", "");
 }
 
 void Push() { 
@@ -557,7 +562,24 @@ void Ret() {
 void Scan() {
 	string varname = midCode[Index].arg1;
 
-	if (global.search_var_type(varname) != "") {
+	if (global.search_var_type(varname) == "") {
+		if (func_syt[curfun].search_var_type(varname) == "INTTK") {
+			printmips("li", "$v0", "5", "");
+		}
+		else {
+			printmips("li", "$v0", "12", "");
+		}
+		cout << "	syscall" << endl;
+		int type;
+		string varReg = loadvar(varname, type);
+		if (type == 1) {
+			printmips("move", varReg, "$v0", "");
+		}
+		if (type == 2) {
+			printmips("sw", "$v0", varReg + "($fp)", "");
+		}
+	}
+	else {
 		if (global.search_var_type(varname) == "INTTK") {
 			printmips("li", "$v0", "5", "");
 		}
@@ -569,20 +591,6 @@ void Scan() {
 		string var_bias = loadvar(varname, type);
 		if (type == 3) {
 			printmips("sw", "$v0", var_bias+"($gp)", "");
-		}
-	}
-	else {
-		if (func_syt[curfun].search_var_type(varname) == "INTTK") {
-			printmips("li", "$v0", "5", "");
-		}
-		else {
-			printmips("li", "$v0", "12", "");
-		}
-		cout << "	syscall" << endl;
-		int type;
-		string var_bias = loadvar(varname, type);
-		if (type == 2) {
-			printmips("sw", "$v0", var_bias + "($fp)", "");
 		}
 	}
 }
@@ -616,7 +624,7 @@ void Print() {
 
 	printmips("li", "$v0", "4", "");
 	printmips("la", "$a0", "Enter", "");
-	cout << "syscall" << endl;
+	cout << "	syscall" << endl;
 	return;
 }
 
@@ -634,6 +642,8 @@ void Assi() {
 	string r_reg = preloadvar(rname, "$v0");
 	int type;
 	string l_reg = loadvar(lname, type);
+	string l_reg_type;
+	
 
 	if (isNum(r_reg)) {
 		if (type == 1) {
@@ -662,12 +672,10 @@ void Assi() {
 }
 
 void generateObjcode() {
-	freopen("mips_code.txt", "w", stdout);
+	freopen("mips.txt", "w", stdout);
 	init();
 	while (Index < midCodeNum) {
 		if (midCode[Index].op == "Con") Con_local();
-		//else if (midCode[Index].op == "Arr") Arr_local(); 局部变量和数组无需初始化
-		//else if (midCode[Index].op == "Var") Var_local();
 		else if (midCode[Index].op == "+" || midCode[Index].op == "-" ||
 			midCode[Index].op == "*" || midCode[Index].op == "/") Calculate();
 		else if (midCode[Index].op == "==" || midCode[Index].op == "!=" ||
@@ -679,8 +687,7 @@ void generateObjcode() {
 		else if (midCode[Index].op == "[]=") Arr_Brack_Assi();
 		else if (midCode[Index].op == "Func") Func_Def();
 		else if (midCode[Index].op == "End") End_Func();
-		else if (midCode[Index].op == "Fcall") Fcall();
-		else if (midCode[Index].op == "Call_Func") Call_Func();
+		else if (midCode[Index].op == "Call") Call_Func();
 		else if (midCode[Index].op == "Jmp") Jmp();
 		else if (midCode[Index].op == "Lab") Lab();
 		else if (midCode[Index].op == "Scan") Scan();
@@ -688,9 +695,14 @@ void generateObjcode() {
 		else if (midCode[Index].op == "Ret") Ret();
 		else if (midCode[Index].op == "Push") Push();
 		else if (midCode[Index].op == "Para") {}
+		else if (midCode[Index].op == "Fcall") {}
+		else if (midCode[Index].op == "Var") {}
+		else if (midCode[Index].op == "Arr") {} //局部变量和数组无需初始化
 		else printf("error");
 		Index++;
 	}
+	printmips("li", "$v0", "10", "");
+	cout << "	syscall" << endl;
 	fclose(stdout);
 }
 

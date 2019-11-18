@@ -1,4 +1,5 @@
 ﻿#include "syntax_analysis.h"
+#include "generateObjcode.h"
 
 bool HandleError;
 Symtable syt[N];
@@ -139,5 +140,6 @@ int main() {
 	fclose(in);
 	//fclose(out);
 	printMidCode();
+	generateObjcode();
 	return 0;
 }

@@ -1,0 +1,19 @@
+.data
+Enter: .asciiz "\n"
+.text
+	move $fp,$sp
+	j main
+main:
+	sub $sp,$sp,8
+	li $v0,12
+	syscall
+	move $s0,$v0
+	li $v0,11
+	move $a0,$s0
+	syscall
+	li $v0,4
+	la $a0,Enter
+	syscall
+$End_main:
+	li $v0,10
+	syscall

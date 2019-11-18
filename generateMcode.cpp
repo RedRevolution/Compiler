@@ -1,8 +1,8 @@
 ﻿#include "generateMcode.h"
 
-int regNum = 0, labNum = 0;
+int regNum, labNum;
 McodeUnit midCode[1000];
-int midCodeNum = 0;
+int midCodeNum;
 
 void emit(string op, string a, string b, string c) {
 	midCode[midCodeNum].op = op;

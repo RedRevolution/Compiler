@@ -3,7 +3,6 @@
 #include <iostream>
 #include <string>
 #include <map>
-#include <stack>
 #define N 300
 using namespace std;
 
@@ -62,7 +61,7 @@ typedef struct Syt {
 	}
 
 	void init() {
-		index = 0;  //a0作为scan和print的专用寄存器
+		index = 0;  
 		sregNo = 0;
 		tregNo = 0;
  		//初始化参数区
@@ -114,7 +113,7 @@ typedef struct Syt {
 		}
 
 		//运行栈 blocksize
-		blocksize = index +  sregNo + tregNo + 2;  //sregNo + tregNo 用于维护寄存器现场，2是调用者的fp和ra
+		blocksize = index +  sregNo + tregNo;  //sregNo + tregNo 用于维护寄存器现场
 	}
 	
 	string search_var_type(string name) {
@@ -125,7 +124,6 @@ typedef struct Syt {
 		}
 		return "";
 	}
-
 }Func_Syt;
 
 extern int globalcnt;  
@@ -134,11 +132,15 @@ extern int index;
 
 void init();
 void Max(int& a, string b, string c, string d);
-string loadvar_code_generate(string a);
+void printmips(string a, string b, string c, string d);
 void Con_local();
 void Arr_local();
 void Var_local();
+string preloadvar(string varname, string regname);
+string loadvar(string varname, int& type);
+void swap(string& a, string& b);
 void Calculate();
+bool isNum(string a);
 void Branch();
 void Fetch();
 void Arr_Brack();
@@ -147,6 +149,8 @@ void Func_Def();
 void End_Func();
 void Fcall();
 void Call_Func();
+void saveReg();
+void restoreReg();
 void Push();
 void Jmp();
 void Lab();
