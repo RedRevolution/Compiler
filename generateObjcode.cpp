@@ -6,15 +6,25 @@ int Index; //当前讨论的指令序列计数器
 map<string, int> func2funcNo;
 int curfun, paraNo;
 Func_Syt func_syt[N], global;
+int paraStack[N], top;
 
 void init() {
 	//字符串
 	cout << ".data" << endl;
+	cout << ".align 4" << endl;
 	cout << "Enter: .asciiz \"\\n\"" << endl;
 	int stringIndex = 0;
 	for (int i = 0; i < midCodeNum; i++) {
 		if (midCode[i].op == "Print" && midCode[i].arg1 != "") {
-			cout << "string_" << stringIndex << ": .asciiz " << "\"" << midCode[i].arg1 << "\"" << endl;
+			cout << ".align 4" << endl;
+			string temp;
+			for (int j = 0; j < midCode[i].arg1.length(); j++) {
+				temp += midCode[i].arg1[j];
+				if (midCode[i].arg1[j] == '\\') {
+					temp += '\\';
+				}
+			}
+			cout << "string_" << stringIndex << ": .asciiz " << "\"" << temp << "\"" << endl;
 			midCode[i].arg1 = "string_" + to_string(stringIndex++);
 		}
 	}
@@ -256,22 +266,20 @@ void Calculate() {
 			string arg2regname = preloadvar(arg2, "$v1");
 			if (isNum(arg1regname) && !isNum(arg2regname)) {
 				printmips("sub", arg2regname, "$zero", arg2regname);
+				int temp = stoi(arg1regname);
+				arg1regname = to_string(-1 * temp);
 				swap(arg1regname, arg2regname);
-			}
-			else if(!isNum(arg1regname) && isNum(arg2regname)){
-				int temp = stoi(arg2regname);
-				arg2regname = to_string(-1 * temp);
 			}
 
 			if (type == 1) {
-				printmips("add", value, arg1regname, arg2regname);
+				printmips("sub", value, arg1regname, arg2regname);
 			}
 			else if (type == 2) {
-				printmips("add", "$v0", arg1regname, arg2regname);
+				printmips("sub", "$v0", arg1regname, arg2regname);
 				printmips("sw", "$v0", value + "($fp)", "");
 			}
 			else if (type == 3) {
-				printmips("add", "$v0", arg1regname, arg2regname);
+				printmips("sub", "$v0", arg1regname, arg2regname);
 				printmips("sw", "$v0", value + "($gp)", "");
 			}
 		}
@@ -491,7 +499,7 @@ void Call_Func() {
 	//维护现场
 	saveReg();
 	//更新fp
-	printmips("sub", "$fp", "$sp", to_string(4 * paraNo));
+	printmips("sub", "$fp", "$sp", to_string(4 * paraCnt()));
 	//更新curfun
 	curfun = func2funcNo[callfuncname];
 	//更新sp
@@ -500,7 +508,7 @@ void Call_Func() {
 	printmips("jal", callfuncname, "", "");
 	//重置sp
 	printmips("move", "$sp", "$fp", "");
-	printmips("add", "$sp", "$sp", to_string(4 * paraNo));
+	printmips("add", "$sp", "$sp", to_string(4 * paraCnt()));
 	//重置curfun
 	curfun = savedfunNo;
 	//重置fp
@@ -508,7 +516,7 @@ void Call_Func() {
 	//重置寄存器
 	restoreReg();
 
-	paraNo = 0;
+	paraNo = paraStack[--top];
 }
 
 void saveReg() {
@@ -518,6 +526,7 @@ void saveReg() {
 	for (int i = 0; i < func_syt[curfun].tregNo; i++) {
 		printmips("sw", "$t" + to_string(i), to_string(-4 * (func_syt[curfun].index + func_syt[curfun].sregNo + i)) + "($fp)", "");
 	}
+	printmips("sw", "$ra", to_string(-4 * (func_syt[curfun].index + func_syt[curfun].sregNo + func_syt[curfun].tregNo)) + "($fp)", "");
 	//printmips("sw", "$fp", to_string(-4 * (func_syt[curfun].blocksize - 2)) + "($fp)", "");
 	//printmips("sw", "$ra", to_string(-4 * (func_syt[curfun].blocksize - 1)) + "($fp)", "");
 }
@@ -529,18 +538,30 @@ void restoreReg() {
 	for (int i = 0; i < func_syt[curfun].tregNo; i++) {
 		printmips("lw", "$t" + to_string(i), to_string(-4 * (func_syt[curfun].index + func_syt[curfun].sregNo + i)) + "($fp)", "");
 	}
+	printmips("lw", "$ra", to_string(-4 * (func_syt[curfun].index + func_syt[curfun].sregNo + func_syt[curfun].tregNo)) + "($fp)", "");
 	//printmips("lw", "$fp", to_string(-4 * (func_syt[curfun].blocksize - 2)) + "($fp)", "");
 	//printmips("lw", "$ra", to_string(-4 * (func_syt[curfun].blocksize - 1)) + "($fp)", "");
 }
 
-void Push() { 
+void Fcall() {
+	paraStack[top++] = paraNo;
+	paraNo = 0;
+}
+
+int paraCnt() {
+	int sum = 0;
+	for (int i = 0; i < top; i++) sum += paraStack[i];
+	return sum;
+}
+
+void Push() {
 	string para = midCode[Index].arg1;
 	string regname = preloadvar(para, "$v0");
 	if (isNum(regname)) {
 		printmips("li", "$v0", regname, "");
 		regname = "$v0";
 	}
-	printmips("sw", regname, to_string(-4 * paraNo) + "($sp)", "");
+	printmips("sw", regname, to_string(-4 * (paraNo+paraCnt())) + "($sp)", "");
 	paraNo++;
 }   
 
@@ -694,8 +715,8 @@ void generateObjcode() {
 		else if (midCode[Index].op == "Print") Print();
 		else if (midCode[Index].op == "Ret") Ret();
 		else if (midCode[Index].op == "Push") Push();
+		else if (midCode[Index].op == "Fcall") Fcall();
 		else if (midCode[Index].op == "Para") {}
-		else if (midCode[Index].op == "Fcall") {}
 		else if (midCode[Index].op == "Var") {}
 		else if (midCode[Index].op == "Arr") {} //局部变量和数组无需初始化
 		else printf("error");

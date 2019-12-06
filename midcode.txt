@@ -1,5 +1,3 @@
 Func,,main,
-Var,CHARTK,a,
-Scan,a,,
-Print,,CHARTK,a
+Print,abc\\\na,,
 End,,,$End_main

@@ -2,6 +2,7 @@
 #include "generateMcode.h"
 #include <iostream>
 #include <string>
+#include <stack>
 #include <map>
 #define N 300
 using namespace std;
@@ -112,9 +113,9 @@ typedef struct Syt {
 			}
 		}
 
-		//运行栈 blocksize
-		blocksize = index +  sregNo + tregNo;  //sregNo + tregNo 用于维护寄存器现场
-	}
+		//运行栈 blocksize							//+1为ra
+		blocksize = index +  sregNo + tregNo + 1;  //sregNo + tregNo 用于维护寄存器现场
+	}	
 	
 	string search_var_type(string name) {
 		for (int i = 0; i < varNum; i++) {
@@ -159,3 +160,5 @@ void Print();
 void Ret();
 void Assi();
 void generateObjcode();
+void Fcall();
+int paraCnt();

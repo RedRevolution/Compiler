@@ -417,7 +417,7 @@ void lpsta() {
 			getsym();
 			expr(r_name);
 			emit("=", l_name, r_name, "");
-			emit("Jmp", lp_entry, "", "");
+			//emit("Jmp", lp_entry, "", "");
 			emit("Lab", con_entry, "", "");
 			printlex(); //打印分号
 
@@ -629,6 +629,7 @@ void rdsta() {
 			if (symbol == "RPARENT")break;
 			printlex(); //打印逗号
 			getsym();
+			name = token;
 			emit("Scan", name, "", "");
 			printlex(); //打印标识符
 		}
