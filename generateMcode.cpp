@@ -11,9 +11,9 @@ void emit(string op, string a, string b, string c) {
 	midCode[midCodeNum++].result = c;
 }
 
-void printMidCode() {
+void printMidCode(const char* fileName) {
 	FILE* out;
-	out = fopen("midcode.txt", "w");
+	out = fopen(fileName, "w");
 	for (int i = 0; i < midCodeNum;i++) {
 		fprintf(out, "%s,%s,%s,%s\n", midCode[i].op.c_str(), midCode[i].arg1.c_str(), midCode[i].arg2.c_str(), midCode[i].result.c_str());
 	}

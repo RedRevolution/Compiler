@@ -3,7 +3,6 @@
 #include <ctype.h>
 #include <string>
 #define N 300
-#define DEBUG 0
 using namespace std;
 
 extern char a;

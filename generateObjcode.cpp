@@ -504,6 +504,9 @@ void Call_Func() {
 	curfun = func2funcNo[callfuncname];
 	//更新sp
 	printmips("sub", "$sp", "$fp", to_string(4 * func_syt[curfun].blocksize));
+	
+	
+
 	//跳转到函数执行
 	printmips("jal", callfuncname, "", "");
 	//重置sp
@@ -692,8 +695,8 @@ void Assi() {
 	}
 }
 
-void generateObjcode() {
-	freopen("mips.txt", "w", stdout);
+void generateObjcode(const char* fileName) {
+	freopen(fileName, "w", stdout);
 	init();
 	while (Index < midCodeNum) {
 		if (midCode[Index].op == "Con") Con_local();

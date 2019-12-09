@@ -130,16 +130,11 @@ void program() {
 	printsyn("<程序>");
 }
 
-int main() {
-	in = fopen("testfile.txt", "rt+");
-	//out = fopen("error.txt", "w");
-	HandleError = false;
+void syntax_analyse(const char* fileName, bool handleError) {
+	in = fopen(fileName, "rt+");
+	HandleError = handleError;
 	getsym();
 	program();
-	//printError();
 	fclose(in);
-	//fclose(out);
-	printMidCode();
-	generateObjcode();
-	return 0;
+	return;
 }

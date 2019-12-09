@@ -1,3 +1,5 @@
 void main(){
-printf("abc\\\na");
+int a;
+scanf(a);
+printf(a);
 }

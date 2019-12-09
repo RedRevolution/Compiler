@@ -13,10 +13,9 @@ extern int regNum,labNum;
 extern McodeUnit midCode[1000];
 extern int midCodeNum;
 
-
+void printMidCode(const char* fileName);
 void emit(string opno, string a, string b, string c);
 string newReg();
 void resetRegNum(int num);
 int getRegNum();
 string newLab();
-void printMidCode();

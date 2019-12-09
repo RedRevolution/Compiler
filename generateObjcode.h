@@ -62,7 +62,7 @@ typedef struct Syt {
 	}
 
 	void init() {
-		index = 0;  
+		index = 0;
 		sregNo = 0;
 		tregNo = 0;
  		//初始化参数区
@@ -159,6 +159,5 @@ void Scan();
 void Print();
 void Ret();
 void Assi();
-void generateObjcode();
-void Fcall();
+void generateObjcode(const char* fileName);
 int paraCnt();

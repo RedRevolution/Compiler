@@ -228,8 +228,6 @@ void add_error(char code,int line) {
 	error_line[error_num++] = line;
 }
 
-
 void lexi_error(char code,int codeline) {
-	//if (DEBUG) fprintf(out, "%d %c   %d\n", line_no, code, codeline); //打印对应error处理的代码行
 	add_error(code, line_no);
 }

@@ -73,6 +73,9 @@ extern Symtable syt[N];
 extern int level;
 extern bool hasreturn;
 
+void syntax_analyse(const char* fileName, bool handleError);
+
+
 //syn
 void error();
 void printsyn(const char s[]);

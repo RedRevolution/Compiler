@@ -1,3 +1,5 @@
 Func,,main,
-Print,abc\\\na,,
+Var,INTTK,a,
+Scan,a,,
+Print,,INTTK,a
 End,,,$End_main
